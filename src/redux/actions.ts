@@ -14,6 +14,14 @@ import {
   TStatusAction,
   ICurrentArticleAction,
   CurrentArticleEnum,
+  UserEnum,
+  IUserRegister,
+  IUserBase,
+  IUserSetLogout,
+  IUserSetCurrent,
+  IUserAction,
+  IUserLogin,
+  IUserEdit,
 } from '../types/types';
 
 export const errorStatus = (): IStatusError => ({
@@ -70,3 +78,64 @@ export const setPage = (page: number): IPageAction => ({
   type: PageEnum.SET_PAGE_NUMBER,
   page,
 });
+
+export const setUser = (user: IUserBase): IUserSetCurrent => ({
+  type: UserEnum.SET_CURRENT_USER,
+  user,
+});
+
+export const userLogout = (): IUserSetLogout => ({
+  type: UserEnum.SET_LOGOUT_USER,
+});
+
+export const getCurrentUser =
+  (userData: IUserRegister | IUserLogin, login: string = '') =>
+  async (dispatch: Dispatch<IUserAction | TStatusAction>) => {
+    dispatch(loadingStatus());
+    try {
+      const resp = await axios.post(`https://blog.kata.academy/api/users${login}`, userData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const { user } = resp.data;
+      dispatch(successStatus());
+      dispatch(setUser(user));
+    } catch {
+      dispatch(errorStatus());
+    }
+  };
+
+export const editCurrentUser =
+  (userData: IUserEdit, token: string) => async (dispatch: Dispatch<IUserAction | TStatusAction>) => {
+    dispatch(loadingStatus());
+    try {
+      const resp = await axios.put(`https://blog.kata.academy/api/user`, userData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`,
+        },
+      });
+      const { user } = resp.data;
+      dispatch(successStatus());
+      dispatch(setUser(user));
+    } catch {
+      dispatch(errorStatus());
+    }
+  };
+
+// export const userLogin = (userData: IUserLogin) => async (dispatch: Dispatch<IUserAction | TStatusAction>) => {
+//   dispatch(loadingStatus());
+//   try {
+//     const resp = await axios.post(`https://blog.kata.academy/api/users/login`, userData, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     });
+//     const { user } = resp.data;
+//     dispatch(successStatus());
+//     dispatch(setUser(user));
+//   } catch {
+//     dispatch(errorStatus());
+//   }
+// };

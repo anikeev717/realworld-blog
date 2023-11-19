@@ -74,3 +74,44 @@ export interface IPageAction {
   type: PageEnum.SET_PAGE_NUMBER;
   page: number;
 }
+
+export interface IUserBase {
+  email: string;
+  token: string;
+  username?: string;
+  bio?: string;
+  image?: string;
+  password?: string;
+}
+
+// export interface IUser {
+//   user: IUserBase;
+// }
+
+export interface IUserRegister {
+  user: Pick<IUserBase, 'username' | 'email' | 'password'>;
+}
+
+export interface IUserEdit {
+  user: Partial<IUserBase>;
+}
+
+export interface IUserLogin {
+  user: Pick<IUserBase, 'email' | 'password'>;
+}
+
+export enum UserEnum {
+  SET_CURRENT_USER = 'SET_CURRENT_USER',
+  SET_LOGOUT_USER = 'SET_LOGOUT_USER',
+}
+
+export interface IUserSetCurrent {
+  type: UserEnum.SET_CURRENT_USER;
+  user: IUserBase;
+}
+
+export interface IUserSetLogout {
+  type: UserEnum.SET_LOGOUT_USER;
+}
+
+export type IUserAction = IUserSetCurrent | IUserSetLogout;

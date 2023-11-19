@@ -1,29 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import avatar from '../../assets/images/avatar.svg';
+import { useTypedSelector } from '../../hooks/use-typed-selector';
+import { AuthBlock } from '../auth-block/auth-block';
+import { IUserBase } from '../../types/types';
 
 import classes from './header.module.scss';
 
 export const Header: React.FunctionComponent = () => {
-  const auth = true;
+  const currentUser = useTypedSelector((state) => state.currentUser);
 
-  const authBlock = (
-    <>
-      <a href="/" className={`${classes.link} ${classes['link-success']} ${classes['link-small']}`}>
-        Create article
-      </a>
-      <Link to="/profile" className={`${classes['link-avatar']} ${classes.link}`}>
-        John Doe
-        <div className={classes.avatar}>
-          <img className={classes.image} src={avatar} alt="avatar" />
-        </div>
-      </Link>
-      <a href="/" className={`${classes.link} ${classes['link-heading']}`}>
-        Log Out
-      </a>
-    </>
-  );
   const notAuthBlock = (
     <>
       <Link to="/sign-in" className={classes.link}>
@@ -34,13 +20,13 @@ export const Header: React.FunctionComponent = () => {
       </Link>
     </>
   );
-  const content = auth ? authBlock : notAuthBlock;
+  const content = currentUser ? <AuthBlock {...(currentUser as IUserBase)} /> : notAuthBlock;
 
   return (
     <header className={classes.header}>
-      <a href="/" className={classes.link}>
+      <Link to="/" className={classes.link}>
         Realworld Blog
-      </a>
+      </Link>
       <div className={classes['link-wrapper']}>{content}</div>
     </header>
   );

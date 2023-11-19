@@ -13,6 +13,9 @@ import {
   CurrentArticleEnum,
   ICurrentArticleAction,
   IArticle,
+  IUserAction,
+  UserEnum,
+  IUserBase,
 } from '../types/types';
 
 const initialStatus: IStateStatus = {
@@ -82,11 +85,23 @@ export const setPageReducer = (state = initialPage, action: IPageAction): number
   return state;
 };
 
+export const setCurrentUser = (state = null, action: IUserAction): null | IUserBase => {
+  switch (action.type) {
+    case UserEnum.SET_CURRENT_USER:
+      return action.user;
+    case UserEnum.SET_LOGOUT_USER:
+      return null;
+    default:
+      return state;
+  }
+};
+
 export const reducer = combineReducers({
   status: setStatus,
   articlesInfo: setArticlesReducer,
-  articleCurrent: setCurrentArticle,
+  article: setCurrentArticle,
   page: setPageReducer,
+  currentUser: setCurrentUser,
 });
 
 export type RootState = ReturnType<typeof reducer>;

@@ -9,7 +9,7 @@ import { Loader } from '../loader/loader';
 
 export const WithArticle: React.FunctionComponent = () => {
   const { slug } = useParams();
-  const article = useTypedSelector((state) => state.articleCurrent);
+  const article = useTypedSelector((state) => state.article);
   const { loading } = useTypedSelector((state) => state.status);
   const { getCurrentArticle } = useActions();
 
