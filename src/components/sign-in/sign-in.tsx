@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 
 import { useActions } from '../../hooks/use-actions';
+import { useTypedSelector } from '../../hooks/use-typed-selector';
+import { IUserErrors } from '../../types/types';
 
 import classes from './sign-in.module.scss';
 
@@ -10,21 +13,32 @@ export const SignIn: React.FunctionComponent = () => {
     register,
     formState: { errors, dirtyFields },
     handleSubmit,
-    reset,
+    setError,
+    clearErrors,
   } = useForm({ mode: 'all' });
 
   const { getCurrentUser } = useActions();
+  const currentUserErrors = useTypedSelector((state) => state.currentUserErrors);
 
-  const onSubmit = (data: { [key: string]: string }) => {
-    const { email, password } = data;
-    const user = {
-      user: {
-        email,
-        password,
+  useEffect(() => {
+    if (currentUserErrors) {
+      const { errors: userErrors } = currentUserErrors as IUserErrors;
+      const inputsErrors = ['email', 'password'];
+      if (userErrors['email or password'])
+        inputsErrors.forEach((name) => setError(name, { message: 'Email or password is invalid' }));
+    } else {
+      clearErrors();
+    }
+  }, [currentUserErrors]);
+
+  const onSubmit = (user: { [key: string]: string }) => {
+    getCurrentUser(
+      {
+        user,
       },
-    };
-    getCurrentUser(user, '/login');
-    reset();
+      'post',
+      '/login'
+    );
   };
   const showError = (name: string): JSX.Element | null =>
     errors[name] ? <p className={classes.error}>{(errors?.[name]?.message as string) || 'Error'}</p> : null;

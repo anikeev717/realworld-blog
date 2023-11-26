@@ -16,7 +16,7 @@ export const AuthBlock = (currentUser: IUserBase) => {
 
   return (
     <>
-      <Link to="/" className={`${classes.link} ${classes['link-success']} ${classes['link-small']}`}>
+      <Link to="/new-article" className={`${classes.link} ${classes['link-success']} ${classes['link-small']}`}>
         Create article
       </Link>
       <Link to="/profile" className={`${classes['link-avatar']} ${classes.link}`}>
@@ -25,7 +25,14 @@ export const AuthBlock = (currentUser: IUserBase) => {
           <img className={classes.image} src={avatarImage} alt="avatar" />
         </div>
       </Link>
-      <Link to="/sign-in" onClick={() => userLogout()} className={`${classes.link} ${classes['link-heading']}`}>
+      <Link
+        to="/sign-in"
+        onClick={() => {
+          userLogout();
+          localStorage.removeItem('userKey');
+        }}
+        className={`${classes.link} ${classes['link-heading']}`}
+      >
         Log Out
       </Link>
     </>

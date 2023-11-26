@@ -42,6 +42,22 @@ export interface IArticle {
   author: IAuthor;
 }
 
+export interface IArticleBaseNew {
+  tags: { name: string }[];
+  title: string;
+  description: string;
+  body: string;
+}
+
+export interface IArticleNew {
+  article: {
+    tagList: string[];
+    title: string;
+    description: string;
+    body: string;
+  };
+}
+
 export interface IAuthor {
   username: string;
   bio?: null;
@@ -51,20 +67,34 @@ export interface IAuthor {
 
 export enum ArticlesEnum {
   GET_ARTICLES = 'GET_ARTICLES',
+  CLEAR_ARTICLES = 'CLEAR_ARTICLES',
 }
 
-export interface IArticlesAction extends IStateArticles {
+export interface IGetArticles extends IStateArticles {
   type: ArticlesEnum.GET_ARTICLES;
 }
 
-export enum CurrentArticleEnum {
-  GET_CURRENT_ARTICLE = 'GET_CURRENT_ARTICLE',
+export interface IClearArticles {
+  type: ArticlesEnum.CLEAR_ARTICLES;
 }
 
-export interface ICurrentArticleAction {
-  type: CurrentArticleEnum.GET_CURRENT_ARTICLE;
+export type TArticlesAction = IGetArticles | IClearArticles;
+
+export enum CurrentArticleEnum {
+  SET_CURRENT_ARTICLE = 'SET_CURRENT_ARTICLE',
+  UNSET_CURRENT_ARTICLE = 'UNSET_CURRENT_ARTICLE',
+}
+
+export interface ISetCurrentArticle {
+  type: CurrentArticleEnum.SET_CURRENT_ARTICLE;
   article: IArticle;
 }
+
+export interface IUnsetCurrentArticle {
+  type: CurrentArticleEnum.UNSET_CURRENT_ARTICLE;
+}
+
+export type TCurrentArticleAction = ISetCurrentArticle | IUnsetCurrentArticle;
 
 export enum PageEnum {
   SET_PAGE_NUMBER = 'SET_PAGE_NUMBER',
@@ -76,24 +106,22 @@ export interface IPageAction {
 }
 
 export interface IUserBase {
+  username: string;
   email: string;
   token: string;
-  username?: string;
   bio?: string;
-  image?: string;
-  password?: string;
+  image: string;
+  password: string;
 }
 
-// export interface IUser {
-//   user: IUserBase;
-// }
+export type IUserBaseEdit = Omit<Partial<IUserBase>, 'token' | 'bio'>;
 
 export interface IUserRegister {
   user: Pick<IUserBase, 'username' | 'email' | 'password'>;
 }
 
 export interface IUserEdit {
-  user: Partial<IUserBase>;
+  user: IUserBaseEdit;
 }
 
 export interface IUserLogin {
@@ -101,12 +129,12 @@ export interface IUserLogin {
 }
 
 export enum UserEnum {
-  SET_CURRENT_USER = 'SET_CURRENT_USER',
+  SET_LOGIN_USER = 'SET_LOGIN_USER;',
   SET_LOGOUT_USER = 'SET_LOGOUT_USER',
 }
 
-export interface IUserSetCurrent {
-  type: UserEnum.SET_CURRENT_USER;
+export interface IUserSetLogin {
+  type: UserEnum.SET_LOGIN_USER;
   user: IUserBase;
 }
 
@@ -114,4 +142,30 @@ export interface IUserSetLogout {
   type: UserEnum.SET_LOGOUT_USER;
 }
 
-export type IUserAction = IUserSetCurrent | IUserSetLogout;
+export type IUserAction = IUserSetLogin | IUserSetLogout;
+
+export interface IUserErrorsBase {
+  username?: string;
+  email?: string;
+  'email or password'?: string;
+}
+
+export interface IUserErrors {
+  errors: IUserErrorsBase;
+}
+
+export enum IUserErrorsEnum {
+  GET_ERRORS = 'GET_ERRORS',
+  NO_ERRORS = 'NO_ERRORS',
+}
+
+export interface IUserGetErrors {
+  type: IUserErrorsEnum.GET_ERRORS;
+  errors: IUserErrors;
+}
+
+export interface IUserNoErrors {
+  type: IUserErrorsEnum.NO_ERRORS;
+}
+
+export type IUserErrorsAction = IUserGetErrors | IUserNoErrors;

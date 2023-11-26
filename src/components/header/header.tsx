@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { AuthBlock } from '../auth-block/auth-block';
 import { IUserBase } from '../../types/types';
+import { useActions } from '../../hooks/use-actions';
 
 import classes from './header.module.scss';
 
 export const Header: React.FunctionComponent = () => {
   const currentUser = useTypedSelector((state) => state.currentUser);
+  const { setPage } = useActions();
 
   const notAuthBlock = (
     <>
@@ -24,7 +26,13 @@ export const Header: React.FunctionComponent = () => {
 
   return (
     <header className={classes.header}>
-      <Link to="/" className={classes.link}>
+      <Link
+        to="/"
+        onClick={() => {
+          setPage(1);
+        }}
+        className={classes.link}
+      >
         Realworld Blog
       </Link>
       <div className={classes['link-wrapper']}>{content}</div>

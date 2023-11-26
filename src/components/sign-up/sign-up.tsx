@@ -1,7 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { ErrorMessage } from '@hookform/error-message';
+import { useEffect } from 'react';
 
 import { useActions } from '../../hooks/use-actions';
+import { useTypedSelector } from '../../hooks/use-typed-selector';
+import { IUserErrors } from '../../types/types';
 
 import classes from './sign-up.module.scss';
 
@@ -10,11 +14,25 @@ export const SignUp: React.FunctionComponent = () => {
     register,
     formState: { errors, dirtyFields },
     handleSubmit,
-    reset,
+    setError,
+    clearErrors,
     watch,
   } = useForm({ mode: 'all' });
 
   const { getCurrentUser } = useActions();
+
+  const currentUserErrors = useTypedSelector((state) => state.currentUserErrors);
+
+  useEffect(() => {
+    if (currentUserErrors) {
+      const { errors: userErrors } = currentUserErrors as IUserErrors;
+      Object.keys(userErrors).forEach((name) =>
+        setError(name, { message: `${name} ${userErrors[name as keyof typeof userErrors]}` })
+      );
+    } else {
+      clearErrors();
+    }
+  }, [currentUserErrors]);
 
   const onSubmit = (data: { [key: string]: string }) => {
     const { username, email, password } = data;
@@ -25,11 +43,10 @@ export const SignUp: React.FunctionComponent = () => {
         password,
       },
     };
-    getCurrentUser(user);
-    reset();
+    getCurrentUser(user, 'post');
   };
-  const showError = (name: string): JSX.Element | null =>
-    errors[name] ? <p className={classes.error}>{(errors?.[name]?.message as string) || 'Error'}</p> : null;
+  // const showError = (name: string): JSX.Element | null =>
+  //   errors[name] ? <p className={classes.error}>{(errors?.[name]?.message as string) || 'Error'}</p> : null;
 
   const addValidationClass = (name: string): string => {
     switch (true) {
@@ -69,7 +86,7 @@ export const SignUp: React.FunctionComponent = () => {
               },
             })}
           />
-          {showError('username')}
+          <ErrorMessage errors={errors} name="username" as="p" className={classes.error} />
         </label>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="email">
           Email address
@@ -86,7 +103,7 @@ export const SignUp: React.FunctionComponent = () => {
               },
             })}
           />
-          {showError('email')}
+          <ErrorMessage errors={errors} name="email" as="p" className={classes.error} />
         </label>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="password">
           Password
@@ -111,7 +128,7 @@ export const SignUp: React.FunctionComponent = () => {
               },
             })}
           />
-          {showError('password')}
+          <ErrorMessage errors={errors} name="password" as="p" className={classes.error} />
         </label>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="repeat">
           Repeat Password
@@ -125,20 +142,19 @@ export const SignUp: React.FunctionComponent = () => {
               validate: (value: string) => (value === watch('password') ? true : 'Password do not match!'),
             })}
           />
-          {showError('repass')}
+          <ErrorMessage errors={errors} name="repass" as="p" className={classes.error} />
         </label>
         <div className={classes['wrapper-checkbox']}>
           <label className={`${classes.label} ${classes['checkbox-label']}`} htmlFor="agree">
             <input
               type="checkbox"
-              checked
               id="agree"
               {...register('agree', {
                 required: 'You must agree for registration!',
               })}
             />
             I agree to the processing of my personal information
-            {showError('agree')}
+            <ErrorMessage errors={errors} name="agree" as="p" className={classes.error} />
           </label>
         </div>
         <button className={`${classes.input} ${classes.button}`} type="submit">

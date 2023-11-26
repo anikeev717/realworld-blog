@@ -1,49 +1,55 @@
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import { useActions } from '../../hooks/use-actions';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
-import { IUserBase } from '../../types/types';
+import { IUserBase, IUserBaseEdit, IUserErrors } from '../../types/types';
 
 import classes from './edit-profile.module.scss';
 
 export const EditProfile: React.FunctionComponent = () => {
+  const currentUser = useTypedSelector((state) => state.currentUser);
+  const { username: currentUsername, email: currentEmail, image: currentImage } = currentUser as IUserBaseEdit;
+  const currentUserErrors = useTypedSelector((state) => state.currentUserErrors);
+
   const {
     register,
     formState: { errors, dirtyFields },
     handleSubmit,
-    reset,
-  } = useForm({ mode: 'onSubmit' });
+    setError,
+    clearErrors,
+  } = useForm({
+    mode: 'onSubmit',
+    defaultValues: { ...(currentUser as IUserBaseEdit) },
+  });
 
-  const { editCurrentUser } = useActions();
+  const { getCurrentUser } = useActions();
 
-  const currentUser = useTypedSelector((state) => state.currentUser);
-
-  if (currentUser === null) return <Navigate to="/sign-in" />;
+  useEffect(() => {
+    if (currentUserErrors) {
+      const { errors: userErrors } = currentUserErrors as IUserErrors;
+      if (userErrors.username) setError('username', { message: `Username is already taken` });
+      if (userErrors.email) setError('email', { message: `Email is already taken` });
+    } else {
+      clearErrors();
+    }
+  }, [currentUserErrors]);
 
   const { token } = currentUser as IUserBase;
 
   const onSubmit = (data: { [key: string]: string }) => {
-    // const { username, email, password, image } = data;
     const newData = Object.fromEntries(Object.entries(data).filter((entrie) => entrie[1]));
     const user = {
       user: {
         ...newData,
-        // username,
-        // email,
-        // password,
-        // image,
       },
     };
-    console.log(user);
-    editCurrentUser(user, token);
-    reset();
+    getCurrentUser(user, 'put', token);
   };
-  const showError = (name: string): JSX.Element | null =>
-    errors[name] ? <p className={classes.error}>{(errors?.[name]?.message as string) || 'Error'}</p> : null;
+  const showError = (name: keyof typeof errors): JSX.Element | null =>
+    errors[name] ? <p className={classes.error}>{errors?.[name]?.message || 'Error'}</p> : null;
 
-  const addValidationClass = (name: string): string => {
+  const addValidationClass = (name: keyof typeof dirtyFields): string => {
     switch (true) {
       case !errors[name] && dirtyFields[name]:
         return classes['input-valid'];
@@ -77,6 +83,7 @@ export const EditProfile: React.FunctionComponent = () => {
                 value: /^[a-z][a-z0-9]*/,
                 message: 'Username must contain only lowercase English letters and numbers!',
               },
+              validate: (val) => (val === currentUsername ? 'The entered value is already current username!' : true),
             })}
           />
           {showError('username')}
@@ -90,9 +97,10 @@ export const EditProfile: React.FunctionComponent = () => {
             placeholder="Email address"
             {...register('email', {
               pattern: {
-                value: /^[a-z0-9]+([._-]?[a-z0-9]+)*@[a-z]*(\.[a-z]{2,3})$/,
+                value: /^[a-z0-9]+([._-]?[a-z0-9]+)*@[a-z]*(\.[a-z]{2,5})$/,
                 message: 'Email is not correct!',
               },
+              validate: (val) => (val === currentEmail ? 'The entered value is already current email!' : true),
             })}
           />
           {showError('email')}
@@ -130,13 +138,15 @@ export const EditProfile: React.FunctionComponent = () => {
             placeholder="Avatar image"
             {...register('image', {
               validate: async (val) => {
-                if (val)
-                  try {
-                    await axios.get(val);
-                    return true;
-                  } catch {
-                    return 'Avatar url is not correct';
-                  }
+                if (val) {
+                  if (val === currentImage) return 'The entered value is already current image URL!';
+                  const img = new Image();
+                  img.src = val;
+                  return new Promise((resolve) => {
+                    img.onload = () => resolve(true);
+                    img.onerror = () => resolve('Avatar url is not correct!');
+                  });
+                }
                 return true;
               },
             })}
