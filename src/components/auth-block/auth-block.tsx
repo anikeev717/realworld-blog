@@ -2,15 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import avatarDefaultImage from '../../assets/images/avatar.svg';
-import { IUserBase } from '../../types/types';
+import { TUserCurrentIs } from '../../types/types';
 import { useActions } from '../../hooks/use-actions';
 
 import classes from './auth-block.module.scss';
 
-export const AuthBlock = (currentUser: IUserBase) => {
+export const AuthBlock = (currentUser: TUserCurrentIs) => {
   const { username, image } = currentUser;
 
-  const { userLogout } = useActions();
+  const { userSetLogout, pageSet } = useActions();
 
   const avatarImage = image || avatarDefaultImage;
 
@@ -28,8 +28,9 @@ export const AuthBlock = (currentUser: IUserBase) => {
       <Link
         to="/sign-in"
         onClick={() => {
-          userLogout();
+          userSetLogout();
           localStorage.removeItem('userKey');
+          pageSet(1);
         }}
         className={`${classes.link} ${classes['link-heading']}`}
       >

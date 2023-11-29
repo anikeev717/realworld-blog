@@ -5,58 +5,42 @@ import { useEffect } from 'react';
 
 import { useActions } from '../../hooks/use-actions';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
-import { IUserErrors } from '../../types/types';
+import { IErrors, IUserRegisterForm, TErrorRegister } from '../../types/types';
+import { userRequestPost } from '../../services/realworld-blog-api/real-world-blog-api';
 
 import classes from './sign-up.module.scss';
 
 export const SignUp: React.FunctionComponent = () => {
   const {
     register,
-    formState: { errors, dirtyFields },
+    formState: { errors },
     handleSubmit,
     setError,
     clearErrors,
     watch,
-  } = useForm({ mode: 'all' });
+  } = useForm<IUserRegisterForm>({ mode: 'all' });
 
-  const { getCurrentUser } = useActions();
+  const { userAsync } = useActions();
+  // const { getCurrentUser } = useActions();
 
-  const currentUserErrors = useTypedSelector((state) => state.currentUserErrors);
+  const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorRegister>);
 
   useEffect(() => {
-    if (currentUserErrors) {
-      const { errors: userErrors } = currentUserErrors as IUserErrors;
+    if (currentErrors) {
+      const { errors: userErrors } = currentErrors;
       Object.keys(userErrors).forEach((name) =>
-        setError(name, { message: `${name} ${userErrors[name as keyof typeof userErrors]}` })
+        setError(name as keyof TErrorRegister, { message: `${name} ${userErrors[name as keyof TErrorRegister]}` })
       );
     } else {
       clearErrors();
     }
-  }, [currentUserErrors]);
+  }, [currentErrors]);
 
-  const onSubmit = (data: { [key: string]: string }) => {
-    const { username, email, password } = data;
-    const user = {
-      user: {
-        username,
-        email,
-        password,
-      },
-    };
-    getCurrentUser(user, 'post');
-  };
-  // const showError = (name: string): JSX.Element | null =>
-  //   errors[name] ? <p className={classes.error}>{(errors?.[name]?.message as string) || 'Error'}</p> : null;
+  const onSubmit = (data: IUserRegisterForm) => {
+    const { agree, repass, ...user } = data;
 
-  const addValidationClass = (name: string): string => {
-    switch (true) {
-      case !errors[name] && dirtyFields[name]:
-        return classes['input-valid'];
-      case !!errors[name]:
-        return classes['input-error'];
-      default:
-        return '';
-    }
+    // getCurrentUser({ user }, 'post');
+    userAsync(userRequestPost({ user }));
   };
 
   return (
@@ -66,7 +50,7 @@ export const SignUp: React.FunctionComponent = () => {
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="username">
           Username
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('username')}`}
+            className={`${classes.input} ${classes.field} ${errors.username ? classes['input-error'] : ''}`}
             type="text"
             id="username"
             placeholder="Username"
@@ -84,6 +68,7 @@ export const SignUp: React.FunctionComponent = () => {
                 value: /^[a-z][a-z0-9]*/,
                 message: 'Username must contain only lowercase English letters and numbers!',
               },
+              validate: (val) => (val?.includes(' ') ? 'Username cannot contain spaces!' : true),
             })}
           />
           <ErrorMessage errors={errors} name="username" as="p" className={classes.error} />
@@ -91,7 +76,7 @@ export const SignUp: React.FunctionComponent = () => {
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="email">
           Email address
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('email')}`}
+            className={`${classes.input} ${classes.field} ${errors.email ? classes['input-error'] : ''}`}
             type="text"
             id="email"
             placeholder="Email address"
@@ -108,7 +93,7 @@ export const SignUp: React.FunctionComponent = () => {
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="password">
           Password
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('password')}`}
+            className={`${classes.input} ${classes.field} ${errors.password ? classes['input-error'] : ''}`}
             type="password"
             id="password"
             placeholder="Password"
@@ -126,6 +111,7 @@ export const SignUp: React.FunctionComponent = () => {
                 value: 40,
                 message: 'Password must not be longer than 40 characters!',
               },
+              validate: (val) => (val?.includes(' ') ? 'Password cannot contain spaces!' : true),
             })}
           />
           <ErrorMessage errors={errors} name="password" as="p" className={classes.error} />
@@ -133,7 +119,7 @@ export const SignUp: React.FunctionComponent = () => {
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="repeat">
           Repeat Password
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('repass')}`}
+            className={`${classes.input} ${classes.field} ${errors.repass ? classes['input-error'] : ''}`}
             type="password"
             id="repeat"
             placeholder="Password"

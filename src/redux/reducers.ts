@@ -2,37 +2,40 @@
 import { combineReducers } from 'redux';
 
 import {
-  ArticlesEnum,
-  IStateArticles,
+  EnumArticleIs,
+  EnumArticles,
+  EnumErrors,
+  EnumPage,
+  EnumStatus,
+  EnumUser,
+  IArticles,
+  IErrors,
+  IErrorsAction,
   IPageAction,
-  PageEnum,
-  StatusEnum,
-  IStateStatus,
-  TStatusAction,
-  TArticlesAction,
-  CurrentArticleEnum,
-  TCurrentArticleAction,
-  IArticle,
+  IStatus,
   IUserAction,
-  UserEnum,
-  IUserBase,
-  IUserErrors,
-  IUserErrorsAction,
-  IUserErrorsEnum,
+  TArticleCurrent,
+  TArticleCurrentAction,
+  TArticlesAction,
+  TErrorEdit,
+  TErrorLogin,
+  TErrorRegister,
+  TStatusAction,
+  TUserCurrent,
 } from '../types/types';
 
-const initialStatus: IStateStatus = {
+const initialStatus: IStatus = {
   loading: false,
   error: false,
 };
 
-export const setStatus = (state = initialStatus, action: TStatusAction): IStateStatus => {
+export const setStatus = (state = initialStatus, action: TStatusAction): IStatus => {
   switch (action.type) {
-    case StatusEnum.GET_STATUS_ERROR:
+    case EnumStatus.GET_STATUS_ERROR:
       return { loading: false, error: true };
-    case StatusEnum.GET_STATUS_LOADING:
+    case EnumStatus.GET_STATUS_LOADING:
       return { loading: true, error: false };
-    case StatusEnum.GET_STATUS_SUCCESS:
+    case EnumStatus.GET_STATUS_SUCCESS:
       return { loading: false, error: false };
 
     default:
@@ -40,17 +43,17 @@ export const setStatus = (state = initialStatus, action: TStatusAction): IStateS
   }
 };
 
-const initialArticles: IStateArticles = {
+const initialArticles: IArticles = {
   articles: [],
   articlesCount: 0,
 };
 
-export const setArticlesReducer = (state = initialArticles, action: TArticlesAction): IStateArticles => {
+export const setArticlesReducer = (state = initialArticles, action: TArticlesAction): IArticles => {
   switch (action.type) {
-    case ArticlesEnum.GET_ARTICLES:
+    case EnumArticles.SET_ARTICLES:
       return { articles: action.articles, articlesCount: action.articlesCount };
 
-    case ArticlesEnum.CLEAR_ARTICLES:
+    case EnumArticles.CLEAR_ARTICLES:
       return initialArticles;
 
     default:
@@ -58,31 +61,14 @@ export const setArticlesReducer = (state = initialArticles, action: TArticlesAct
   }
 };
 
-// const initialCurrentArticle: IArticle = {
-//   slug: '',
-//   title: '',
-//   description: '',
-//   body: '',
-//   createdAt: '',
-//   updatedAt: '',
-//   tagList: [],
-//   favorited: false,
-//   favoritesCount: 0,
-//   author: {
-//     username: '',
-//     image: '',
-//     following: false,
-//   },
-// }
-
 const initialCurrentArticle = null;
 
-export const setCurrentArticle = (state = initialCurrentArticle, action: TCurrentArticleAction): IArticle | null => {
+export const setCurrentArticle = (state = initialCurrentArticle, action: TArticleCurrentAction): TArticleCurrent => {
   switch (action.type) {
-    case CurrentArticleEnum.SET_CURRENT_ARTICLE:
+    case EnumArticleIs.SET_CURRENT_ARTICLE:
       return action.article;
 
-    case CurrentArticleEnum.UNSET_CURRENT_ARTICLE:
+    case EnumArticleIs.UNSET_CURRENT_ARTICLE:
       return null;
 
     default:
@@ -93,27 +79,30 @@ export const setCurrentArticle = (state = initialCurrentArticle, action: TCurren
 const initialPage: number = 1;
 
 export const setPageReducer = (state = initialPage, action: IPageAction): number => {
-  if (action.type === PageEnum.SET_PAGE_NUMBER) return action.page;
+  if (action.type === EnumPage.SET_PAGE_NUMBER) return action.page;
 
   return state;
 };
 
-export const setCurrentUser = (state = null, action: IUserAction): null | IUserBase => {
+export const setCurrentUser = (state = null, action: IUserAction): TUserCurrent => {
   switch (action.type) {
-    case UserEnum.SET_LOGIN_USER:
+    case EnumUser.SET_LOGIN_USER:
       return action.user;
-    case UserEnum.SET_LOGOUT_USER:
+    case EnumUser.SET_LOGOUT_USER:
       return null;
     default:
       return state;
   }
 };
 
-export const setUserErrors = (state = null, action: IUserErrorsAction): null | IUserErrors => {
+export const setErrors = (
+  state = null,
+  action: IErrorsAction
+): null | IErrors<TErrorRegister | TErrorLogin | TErrorEdit> => {
   switch (action.type) {
-    case IUserErrorsEnum.GET_ERRORS:
+    case EnumErrors.SET_ERRORS:
       return action.errors;
-    case IUserErrorsEnum.NO_ERRORS:
+    case EnumErrors.CLEAR_ERRORS:
       return null;
     default:
       return state;
@@ -122,11 +111,11 @@ export const setUserErrors = (state = null, action: IUserErrorsAction): null | I
 
 export const reducer = combineReducers({
   status: setStatus,
-  articlesInfo: setArticlesReducer,
-  article: setCurrentArticle,
   page: setPageReducer,
+  articlesInfo: setArticlesReducer,
+  currentArticle: setCurrentArticle,
   currentUser: setCurrentUser,
-  currentUserErrors: setUserErrors,
+  currentErrors: setErrors,
 });
 
 export type RootState = ReturnType<typeof reducer>;

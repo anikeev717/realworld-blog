@@ -4,20 +4,33 @@ import { useEffect } from 'react';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { Article } from '../article/article';
 import { useActions } from '../../hooks/use-actions';
-import { IArticle } from '../../types/types';
+import { TArticleCurrent, TUserCurrent } from '../../types/types';
 import { Loader } from '../loader/loader';
+import { ErrorMessage } from '../error/error';
+import { articleRequestGet } from '../../services/realworld-blog-api/real-world-blog-api';
+import { articleCurrentSet } from '../../redux/actions';
 
 export const WithArticle: React.FunctionComponent = () => {
   const { slug } = useParams();
-  const article = useTypedSelector((state) => state.article);
-  const { loading } = useTypedSelector((state) => state.status);
-  const { getCurrentArticle } = useActions();
+  const article = useTypedSelector((state) => state.currentArticle as TArticleCurrent);
+  const { loading, error } = useTypedSelector((state) => state.status);
+  const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
+
+  const { articleAsync } = useActions();
+
+  let userToken: string | undefined;
+  if (currentUser) {
+    const { token } = currentUser;
+    userToken = token;
+  }
 
   useEffect(() => {
-    if (slug) getCurrentArticle(slug);
-  }, [slug]);
+    if (slug) articleAsync(articleRequestGet(slug, userToken), articleCurrentSet);
+  }, [slug, userToken]);
 
-  const showArticle = article ? <Article {...(article as IArticle)} active /> : null;
+  if (error) return <ErrorMessage />;
+
+  const showArticle = article ? <Article {...article} active /> : null;
   const content = loading ? <Loader /> : showArticle;
 
   return content;

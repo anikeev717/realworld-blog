@@ -9,7 +9,6 @@ interface IIsUserStatusProps {
 
 export const IsUserStatus: React.FunctionComponent<IIsUserStatusProps> = ({ status, children }) => {
   const currentUser = useTypedSelector((state) => state.currentUser);
-  console.log('been here');
 
   if (!!currentUser === status) return <Navigate to="/" />;
 

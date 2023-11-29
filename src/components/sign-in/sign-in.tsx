@@ -1,58 +1,51 @@
-import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { ErrorMessage } from '@hookform/error-message';
 import { useEffect } from 'react';
 
 import { useActions } from '../../hooks/use-actions';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
-import { IUserErrors } from '../../types/types';
+import { IErrors, TErrorLogin, TUserLogin } from '../../types/types';
+import { userRequestPost } from '../../services/realworld-blog-api/real-world-blog-api';
 
 import classes from './sign-in.module.scss';
 
 export const SignIn: React.FunctionComponent = () => {
   const {
     register,
-    formState: { errors, dirtyFields },
+    formState: { errors },
     handleSubmit,
     setError,
     clearErrors,
-  } = useForm({ mode: 'all' });
+  } = useForm<TUserLogin>({ mode: 'all' });
 
-  const { getCurrentUser } = useActions();
-  const currentUserErrors = useTypedSelector((state) => state.currentUserErrors);
+  const { userAsync } = useActions();
+  // const { getCurrentUser } = useActions();
+  const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorLogin>);
 
   useEffect(() => {
-    if (currentUserErrors) {
-      const { errors: userErrors } = currentUserErrors as IUserErrors;
-      const inputsErrors = ['email', 'password'];
-      if (userErrors['email or password'])
-        inputsErrors.forEach((name) => setError(name, { message: 'Email or password is invalid' }));
+    if (currentErrors) {
+      const { errors: userErrors } = currentErrors;
+      if (userErrors['email or password']) {
+        const inputsErrors = ['email', 'password'] as const;
+        inputsErrors.forEach((name) => setError(name, { message: `email or password is invalid` }));
+      }
     } else {
       clearErrors();
     }
-  }, [currentUserErrors]);
+  }, [currentErrors]);
 
-  const onSubmit = (user: { [key: string]: string }) => {
-    getCurrentUser(
-      {
-        user,
-      },
-      'post',
-      '/login'
-    );
+  const onSubmit = (user: TUserLogin) => {
+    // getCurrentUser(
+    //   {
+    //     user,
+    //   },
+    //   'post',
+    //   '/login'
+    // );
+    userAsync(userRequestPost({ user }, '/login'));
   };
-  const showError = (name: string): JSX.Element | null =>
-    errors[name] ? <p className={classes.error}>{(errors?.[name]?.message as string) || 'Error'}</p> : null;
 
-  const addValidationClass = (name: string): string => {
-    switch (true) {
-      case !errors[name] && dirtyFields[name]:
-        return classes['input-valid'];
-      case !!errors[name]:
-        return classes['input-error'];
-      default:
-        return '';
-    }
-  };
   return (
     <form className={classes.form} name="signin-form" onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={classes.fieldset}>
@@ -60,7 +53,7 @@ export const SignIn: React.FunctionComponent = () => {
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="email">
           Email address
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('email')}`}
+            className={`${classes.input} ${classes.field} ${errors?.email ? classes['input-error'] : ''}`}
             type="text"
             id="email"
             placeholder="Email address"
@@ -72,12 +65,12 @@ export const SignIn: React.FunctionComponent = () => {
               },
             })}
           />
-          {showError('email')}
+          <ErrorMessage errors={errors} name="email" as="p" className={classes.error} />
         </label>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="password">
           Password
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('password')}`}
+            className={`${classes.input} ${classes.field} ${errors?.password ? classes['input-error'] : ''}`}
             type="password"
             id="password"
             placeholder="Password"
@@ -97,7 +90,7 @@ export const SignIn: React.FunctionComponent = () => {
               },
             })}
           />
-          {showError('password')}
+          <ErrorMessage errors={errors} name="password" as="p" className={classes.error} />
         </label>
         <button className={`${classes.input} ${classes.button}`} type="submit">
           Login

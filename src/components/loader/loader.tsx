@@ -4,7 +4,7 @@ import { Spin } from 'antd';
 import classes from './loader.module.scss';
 
 export const Loader: React.FC = () => (
-  <Spin wrapperClassName={classes.loader} tip="Загрузка..." size="small">
+  <Spin wrapperClassName={classes.loader} tip="Loading..." size="small">
     <div />
   </Spin>
 );

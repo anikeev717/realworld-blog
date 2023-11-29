@@ -166,6 +166,24 @@
   font-size: 20px;
   font-weight: 400;
   line-height: 22px; /* 183.333% */
+
+  & h1, h2, h3, h4, h5, h6, p, li, ul, ol, li {
+    margin: revert;
+    line-height: 150%;
+  }
+  & h1, h2 {
+    text-align: center;
+  }
+  & p {
+    margin-left: 20px;
+  }
+  & ul {
+    margin-left: 50px;
+    & li {
+      line-height: 200%;
+    }
+  }
+
 }
 
 .button-wrapper {

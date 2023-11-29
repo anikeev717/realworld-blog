@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { AuthBlock } from '../auth-block/auth-block';
-import { IUserBase } from '../../types/types';
+import { TUserCurrent } from '../../types/types';
 import { useActions } from '../../hooks/use-actions';
 
 import classes from './header.module.scss';
 
 export const Header: React.FunctionComponent = () => {
-  const currentUser = useTypedSelector((state) => state.currentUser);
-  const { setPage } = useActions();
+  const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
+  const { pageSet } = useActions();
 
   const notAuthBlock = (
     <>
@@ -22,14 +22,14 @@ export const Header: React.FunctionComponent = () => {
       </Link>
     </>
   );
-  const content = currentUser ? <AuthBlock {...(currentUser as IUserBase)} /> : notAuthBlock;
+  const content = currentUser ? <AuthBlock {...currentUser} /> : notAuthBlock;
 
   return (
     <header className={classes.header}>
       <Link
         to="/"
         onClick={() => {
-          setPage(1);
+          pageSet(1);
         }}
         className={classes.link}
       >

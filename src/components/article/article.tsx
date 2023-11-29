@@ -3,15 +3,20 @@ import format from 'date-fns/format';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { Button } from 'antd';
+import { useEffect, useState } from 'react';
 
-import { IArticle, IUserBase } from '../../types/types';
+import avatarDefaultImage from '../../assets/images/avatar.svg';
+import { IArticleIs, TUserCurrent } from '../../types/types';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { useActions } from '../../hooks/use-actions';
 import { DeleteArticle } from '../delete-article/delete-article';
+import { getValidImageSrc } from '../../services/get-valid-image-src/get-valid-image-src';
+import { articleRequestDelete, articleRequestFavorite } from '../../services/realworld-blog-api/real-world-blog-api';
+import { articleCurrentSet } from '../../redux/actions';
 
 import classes from './article.module.scss';
 
-interface IArticleProps extends IArticle {
+interface IArticleProps extends IArticleIs {
   active?: boolean;
 }
 
@@ -29,24 +34,24 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
 }) => {
   const tagElements = tagList.map((tag) => (
     <li key={Math.random()} className={classes.tag}>
-      {tag}
+      {tag.trim() || 'Empty tag'}
     </li>
   ));
 
-  const { deleteCurrentArticle, favoriteArticle } = useActions();
+  const { articleAsync } = useActions();
+  // const { deleteCurrentArticle, favoriteArticle } = useActions();
   const navigate = useNavigate();
 
   let featuresBlock = null;
-  const currentUser = useTypedSelector((state) => state.currentUser);
+  const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
   if (currentUser) {
-    const { username: currentUsername, token } = currentUser as IUserBase;
+    const { username: currentUsername, token } = currentUser;
     if (active && username === currentUsername)
       featuresBlock = (
         <div className={classes['button-wrapper']}>
           <DeleteArticle
-            onConfirm={async () => {
-              await deleteCurrentArticle(slug, token);
-              navigate('/');
+            onConfirm={() => {
+              articleAsync(articleRequestDelete(token, slug), articleCurrentSet, navigate);
             }}
           />
           <Button
@@ -56,7 +61,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
               marginLeft: '12px',
             }}
             onClick={() => {
-              navigate(`/articles/${slug}/edit`);
+              navigate(`edit`);
             }}
           >
             Edit
@@ -65,20 +70,28 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
       );
   }
 
-  let favoritedLocal = favorited;
   const like = async () => {
     if (currentUser) {
-      const { token } = currentUser as IUserBase;
-      favoriteArticle(token, favoritedLocal, slug);
-      favoritedLocal = !favoritedLocal;
-      navigate('/');
-      console.log(favoritedLocal);
+      const { token } = currentUser;
+      // favoriteArticle(token, favorited, slug);
+      articleAsync(articleRequestFavorite(token, slug, favorited), articleCurrentSet);
+      // navigate('/');
     }
   };
+  const [src, setSrc] = useState<string>(avatarDefaultImage);
 
+  useEffect(() => {
+    getValidImageSrc(image)
+      .then(() => setSrc(image))
+      .catch(() => setSrc(avatarDefaultImage));
+  }, []);
+
+  const showTitle = title.trim() || slug;
+  const showDescription = description.trim() || `Description for this article is not present!`;
+  const showBody = body.trim() || `Text for this article is not present!`;
   const formatedDate = format(new Date(createdAt), 'MMMM d, yyyy');
 
-  const content = active ? <ReactMarkdown className={classes.content}>{body}</ReactMarkdown> : null;
+  const content = active ? <ReactMarkdown className={classes.content}>{showBody}</ReactMarkdown> : null;
 
   return (
     <div className={classes.article}>
@@ -86,12 +99,12 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
         <div className={classes.header}>
           <div className={classes['header-info']}>
             <Link className={classes.title} to={`/articles/${slug}`}>
-              {title}
+              {showTitle}
             </Link>
             <button
               type="button"
               onClick={() => like()}
-              className={`${favoritedLocal ? classes['like-delete'] : classes['like-post']} ${classes.like}`}
+              className={`${favorited ? classes['like-delete'] : classes['like-post']} ${classes.like}`}
             />
             <span className={classes['like-count']}>{favoritesCount}</span>
           </div>
@@ -104,11 +117,11 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
             {featuresBlock}
           </div>
           <div className={classes.avatar}>
-            <img className={classes.image} src={image} alt="avatar" />
+            <img className={classes.image} src={src} alt="avatar" />
           </div>
         </div>
       </div>
-      <div className={classes.description}>{description}</div>
+      <div className={classes.description}>{showDescription}</div>
       {content}
     </div>
   );

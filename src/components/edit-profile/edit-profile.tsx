@@ -1,64 +1,55 @@
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
+import { ErrorMessage } from '@hookform/error-message';
+import { Entries } from 'type-fest';
 
 import { useActions } from '../../hooks/use-actions';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
-import { IUserBase, IUserBaseEdit, IUserErrors } from '../../types/types';
+import { TUserEdit, IErrors, TErrorEdit, TUserCurrentIs } from '../../types/types';
+import { userRequestPut } from '../../services/realworld-blog-api/real-world-blog-api';
 
 import classes from './edit-profile.module.scss';
 
 export const EditProfile: React.FunctionComponent = () => {
-  const currentUser = useTypedSelector((state) => state.currentUser);
-  const { username: currentUsername, email: currentEmail, image: currentImage } = currentUser as IUserBaseEdit;
-  const currentUserErrors = useTypedSelector((state) => state.currentUserErrors);
+  const { token, ...currentValues } = useTypedSelector((state) => state.currentUser as TUserCurrentIs);
+  const { username: currentUsername, email: currentEmail, image: currentImage } = currentValues;
+  const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorEdit>);
 
   const {
     register,
-    formState: { errors, dirtyFields },
+    formState: { errors, isDirty },
     handleSubmit,
     setError,
     clearErrors,
-  } = useForm({
-    mode: 'onSubmit',
-    defaultValues: { ...(currentUser as IUserBaseEdit) },
+  } = useForm<TUserEdit>({
+    mode: 'all',
+    defaultValues: { ...currentValues },
   });
 
-  const { getCurrentUser } = useActions();
+  const { userAsync } = useActions();
+  // const { getCurrentUser } = useActions();
 
   useEffect(() => {
-    if (currentUserErrors) {
-      const { errors: userErrors } = currentUserErrors as IUserErrors;
-      if (userErrors.username) setError('username', { message: `Username is already taken` });
-      if (userErrors.email) setError('email', { message: `Email is already taken` });
+    if (currentErrors) {
+      const { errors: userErrors } = currentErrors;
+      Object.keys(userErrors).forEach((name) =>
+        setError(name as keyof TErrorEdit, { message: `${name} ${userErrors[name as keyof TErrorEdit]}` })
+      );
     } else {
       clearErrors();
     }
-  }, [currentUserErrors]);
+  }, [currentErrors]);
 
-  const { token } = currentUser as IUserBase;
-
-  const onSubmit = (data: { [key: string]: string }) => {
-    const newData = Object.fromEntries(Object.entries(data).filter((entrie) => entrie[1]));
-    const user = {
-      user: {
-        ...newData,
-      },
-    };
-    getCurrentUser(user, 'put', token);
-  };
-  const showError = (name: keyof typeof errors): JSX.Element | null =>
-    errors[name] ? <p className={classes.error}>{errors?.[name]?.message || 'Error'}</p> : null;
-
-  const addValidationClass = (name: keyof typeof dirtyFields): string => {
-    switch (true) {
-      case !errors[name] && dirtyFields[name]:
-        return classes['input-valid'];
-      case !!errors[name]:
-        return classes['input-error'];
-      default:
-        return '';
+  const onSubmit = (data: TUserEdit) => {
+    const dataEntries = Object.entries(data) as Entries<typeof data>;
+    const filteredData = dataEntries.filter((entrie) => entrie[1]?.trim());
+    if (filteredData.length) {
+      const user = Object.fromEntries(filteredData);
+      // getCurrentUser({ user }, 'put', token);
+      userAsync(userRequestPut({ user }, token));
     }
   };
+
   return (
     <form className={classes.form} name="edit-form" onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={classes.fieldset}>
@@ -66,7 +57,7 @@ export const EditProfile: React.FunctionComponent = () => {
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="username">
           Username
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('username')}`}
+            className={`${classes.input} ${classes.field} ${errors.username ? classes['input-error'] : ''}`}
             type="text"
             id="username"
             placeholder="Username"
@@ -83,15 +74,27 @@ export const EditProfile: React.FunctionComponent = () => {
                 value: /^[a-z][a-z0-9]*/,
                 message: 'Username must contain only lowercase English letters and numbers!',
               },
-              validate: (val) => (val === currentUsername ? 'The entered value is already current username!' : true),
+              validate: (val) => {
+                if (val) {
+                  switch (true) {
+                    case val.includes(' '):
+                      return 'Username cannot contain spaces!';
+                    case val === currentUsername:
+                      return 'The entered value is already current username!';
+                    default:
+                      return true;
+                  }
+                }
+                return true;
+              },
             })}
           />
-          {showError('username')}
+          <ErrorMessage errors={errors} name="username" as="p" className={classes.error} />
         </label>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="email">
           Email address
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('email')}`}
+            className={`${classes.input} ${classes.field} ${errors.email ? classes['input-error'] : ''}`}
             type="text"
             id="email"
             placeholder="Email address"
@@ -103,12 +106,12 @@ export const EditProfile: React.FunctionComponent = () => {
               validate: (val) => (val === currentEmail ? 'The entered value is already current email!' : true),
             })}
           />
-          {showError('email')}
+          <ErrorMessage errors={errors} name="email" as="p" className={classes.error} />
         </label>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="password">
           New password
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('password')}`}
+            className={`${classes.input} ${classes.field} ${errors.password ? classes['input-error'] : ''}`}
             type="password"
             id="password"
             placeholder="New password"
@@ -125,14 +128,15 @@ export const EditProfile: React.FunctionComponent = () => {
                 value: 40,
                 message: 'Password must not be longer than 40 characters!',
               },
+              validate: (val) => (val?.includes(' ') ? 'Password cannot contain spaces!' : true),
             })}
           />
-          {showError('password')}
+          <ErrorMessage errors={errors} name="password" as="p" className={classes.error} />
         </label>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="image">
           Avatar image (url)
           <input
-            className={`${classes.input} ${classes.field} ${addValidationClass('image')}`}
+            className={`${classes.input} ${classes.field} ${errors.image ? classes['input-error'] : ''}`}
             type="text"
             id="image"
             placeholder="Avatar image"
@@ -151,9 +155,9 @@ export const EditProfile: React.FunctionComponent = () => {
               },
             })}
           />
-          {showError('image')}
+          <ErrorMessage errors={errors} name="image" as="p" className={classes.error} />
         </label>
-        <button className={`${classes.input} ${classes.button}`} type="submit">
+        <button disabled={!isDirty} className={`${classes.input} ${classes.button}`} type="submit">
           Save
         </button>
       </fieldset>

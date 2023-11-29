@@ -2,14 +2,14 @@ import React from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
 
-import { IArticleBaseNew } from '../../types/types';
+import { IArticleNewForm } from '../../types/types';
 
 import classes from './article-form.module.scss';
 
 interface IArticleFormProps {
-  formData: UseFormReturn<IArticleBaseNew, unknown, undefined>;
-  fieldData: UseFieldArrayReturn<IArticleBaseNew, 'tags', 'id'>;
-  onSubmit: (data: IArticleBaseNew) => void;
+  formData: UseFormReturn<IArticleNewForm, unknown, undefined>;
+  fieldData: UseFieldArrayReturn<IArticleNewForm, 'tags', 'id'>;
+  onSubmit: (data: IArticleNewForm) => void;
 }
 
 export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formData, fieldData, onSubmit }) => {
@@ -20,6 +20,10 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
   } = formData;
 
   const { append, fields, remove } = fieldData;
+
+  const tagsError = <ErrorMessage errors={errors} name="tags.root" as="p" className={classes.error} /> || (
+    <ErrorMessage errors={errors} name="tags" as="p" className={classes.error} />
+  );
 
   return (
     <form className={classes.form} name="signup-form" onSubmit={handleSubmit(onSubmit)}>
@@ -32,17 +36,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
             type="text"
             id="title"
             placeholder="Title"
-            {...register('title', {
-              required: 'Title is required for create an article!',
-              minLength: {
-                value: 5,
-                message: 'Title needs to be at least 5 characters!',
-              },
-              maxLength: {
-                value: 128,
-                message: 'Title must not be longer than 128 characters!',
-              },
-            })}
+            {...register('title')}
           />
           <ErrorMessage errors={errors} name="title" as="p" className={classes.error} />
         </label>
@@ -53,17 +47,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
             type="text"
             id="description"
             placeholder="Title"
-            {...register('description', {
-              required: 'Short description is required for create an article!',
-              minLength: {
-                value: 5,
-                message: 'Short description needs to be at least 5 characters!',
-              },
-              maxLength: {
-                value: 256,
-                message: 'Short description must not be longer than 256 characters!',
-              },
-            })}
+            {...register('description')}
           />
           <ErrorMessage errors={errors} name="description" as="p" className={classes.error} />
         </label>
@@ -75,22 +59,13 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
             }`}
             id="text"
             placeholder="Text"
-            {...register('body', {
-              required: 'Text is required for create an article!',
-              minLength: {
-                value: 5,
-                message: 'Text of article needs to be at least 5 characters!',
-              },
-              maxLength: {
-                value: 5000,
-                message: 'Text of article must not be longer than 5000 characters!',
-              },
-            })}
+            {...register('body')}
           />
           <ErrorMessage errors={errors} name="body" as="p" className={classes.error} />
         </label>
         <div className={`${classes.label} ${classes['input-label']} ${classes.tags}`}>
           Tags
+          {tagsError}
           {fields.map(
             (field, index): JSX.Element => (
               <div key={field.id} className={classes['tag-wrapper']}>
@@ -102,9 +77,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
                     id={`tags.${index}.name`}
                     type="text"
                     placeholder="Tag"
-                    {...register(`tags.${index}.name` as const, {
-                      required: 'Tag is cannot be empty to create an article!',
-                    })}
+                    {...register(`tags.${index}.name` as const)}
                   />
                   <ErrorMessage errors={errors} name={`tags.${index}.name`} as="p" className={classes.error} />
                 </label>
@@ -120,7 +93,9 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
           <input
             type="button"
             value="Add tag"
-            onClick={() => append({ name: '' })}
+            onClick={() => {
+              append({ name: '' });
+            }}
             className={`${classes.input} ${classes['button-add']}`}
           />
         </div>

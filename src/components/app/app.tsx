@@ -11,13 +11,14 @@ import { useActions } from '../../hooks/use-actions';
 import { NewArticle } from '../new-article/new-article';
 import { WithEditForm } from '../with-edit-form/with-edit-form';
 import { IsUserStatus } from '../../hoc/is-user-status/is-user-status';
+import { NotFoundPage } from '../not-found-page/not-found-page';
 
 export const App: React.FunctionComponent = () => {
-  const { userLogin } = useActions();
+  const { userSetLogin } = useActions();
 
   useEffect(() => {
     const localStorageUser = localStorage.getItem('userKey');
-    if (localStorageUser) userLogin(JSON.parse(localStorageUser));
+    if (localStorageUser) userSetLogin(JSON.parse(localStorageUser));
   }, []);
 
   return (
@@ -59,6 +60,7 @@ export const App: React.FunctionComponent = () => {
             </IsUserStatus>
           }
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

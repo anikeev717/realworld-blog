@@ -5,9 +5,9 @@ import { EditArticle } from '../edit-article/edit-article';
 
 export const WithEditForm = () => {
   const { slug } = useParams();
-  const article = useTypedSelector((state) => state.article);
+  const currentArticle = useTypedSelector((state) => state.currentArticle);
 
-  if (!article) return <Navigate to={`/articles/${slug}`} />;
+  if (!currentArticle) return <Navigate to={`/articles/${slug}`} />;
 
   return <EditArticle slug={slug!} />;
 };

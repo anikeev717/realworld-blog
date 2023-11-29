@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@hookform/error-message": "^2.0.1",
+    "@hookform/resolvers": "^3.3.2",
     "@react-hooks-library/core": "^0.5.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -25,8 +26,10 @@
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
     "sass": "^1.69.5",
+    "type-fest": "^4.8.2",
     "typescript": "^5.2.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zod": "^3.22.4"
   },
   "scripts": {
     "start": "react-scripts start",

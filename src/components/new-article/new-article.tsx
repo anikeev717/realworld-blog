@@ -1,20 +1,29 @@
 import React from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { useActions } from '../../hooks/use-actions';
-import { IArticleBaseNew, IUserBase } from '../../types/types';
+import { IArticleNewForm, TUserCurrentIs } from '../../types/types';
 import { Loader } from '../loader/loader';
 import { ArticleForm } from '../article-form/article-form';
+import { articleFormSchema } from '../../services/form-schema-objects/form-schema-objects';
+import { articleRequestPost } from '../../services/realworld-blog-api/real-world-blog-api';
+import { articleCurrentSet } from '../../redux/actions';
 
 export const NewArticle: React.FunctionComponent = () => {
-  const currentUser = useTypedSelector((state) => state.currentUser);
+  const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrentIs);
   const { loading } = useTypedSelector((state) => state.status);
-  const { postCurrentArticle } = useActions();
+  const { articleAsync } = useActions();
+  // const { postCurrentArticle } = useActions();
   const navigate = useNavigate();
 
-  const formData = useForm<IArticleBaseNew>({ mode: 'all', defaultValues: { tags: [{ name: '' }] } });
+  const formData = useForm<IArticleNewForm>({
+    mode: 'all',
+    defaultValues: { tags: [{ name: '' }] },
+    resolver: zodResolver(articleFormSchema),
+  });
   const { control } = formData;
 
   const fieldData = useFieldArray({
@@ -22,21 +31,20 @@ export const NewArticle: React.FunctionComponent = () => {
     name: 'tags',
   });
 
-  const { token } = currentUser as IUserBase;
+  const { token } = currentUser;
 
-  const onSubmit = (data: IArticleBaseNew) => {
-    const { title, description, body, tags } = data;
+  const onSubmit = (data: IArticleNewForm) => {
+    const { tags, ...other } = data;
     const tagList = tags.map((el) => el.name);
     const article = {
       article: {
-        title,
-        description,
-        body,
+        ...other,
         tagList,
       },
     };
-    postCurrentArticle(article, token, navigate); //
-    formData.reset();
+    articleAsync(articleRequestPost(article, token), articleCurrentSet, navigate);
+    // postCurrentArticle(article, token, navigate);
+    // formData.reset();
   };
 
   const content = loading ? <Loader /> : <ArticleForm formData={formData} fieldData={fieldData} onSubmit={onSubmit} />;
