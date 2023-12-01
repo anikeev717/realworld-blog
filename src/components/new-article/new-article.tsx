@@ -16,7 +16,6 @@ export const NewArticle: React.FunctionComponent = () => {
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrentIs);
   const { loading } = useTypedSelector((state) => state.status);
   const { articleAsync } = useActions();
-  // const { postCurrentArticle } = useActions();
   const navigate = useNavigate();
 
   const formData = useForm<IArticleNewForm>({
@@ -43,8 +42,6 @@ export const NewArticle: React.FunctionComponent = () => {
       },
     };
     articleAsync(articleRequestPost(article, token), articleCurrentSet, navigate);
-    // postCurrentArticle(article, token, navigate);
-    // formData.reset();
   };
 
   const content = loading ? <Loader /> : <ArticleForm formData={formData} fieldData={fieldData} onSubmit={onSubmit} />;

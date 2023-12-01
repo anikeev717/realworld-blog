@@ -21,7 +21,6 @@ export const SignUp: React.FunctionComponent = () => {
   } = useForm<IUserRegisterForm>({ mode: 'all' });
 
   const { userAsync } = useActions();
-  // const { getCurrentUser } = useActions();
 
   const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorRegister>);
 
@@ -38,8 +37,6 @@ export const SignUp: React.FunctionComponent = () => {
 
   const onSubmit = (data: IUserRegisterForm) => {
     const { agree, repass, ...user } = data;
-
-    // getCurrentUser({ user }, 'post');
     userAsync(userRequestPost({ user }));
   };
 

@@ -1,4 +1,3 @@
-// import avatar from '../../assets/images/avatar.svg';
 import format from 'date-fns/format';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -32,14 +31,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   author: { username, image },
   active = false,
 }) => {
-  const tagElements = tagList.map((tag) => (
-    <li key={Math.random()} className={classes.tag}>
-      {tag.trim() || 'Empty tag'}
-    </li>
-  ));
-
   const { articleAsync } = useActions();
-  // const { deleteCurrentArticle, favoriteArticle } = useActions();
   const navigate = useNavigate();
 
   let featuresBlock = null;
@@ -73,9 +65,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   const like = async () => {
     if (currentUser) {
       const { token } = currentUser;
-      // favoriteArticle(token, favorited, slug);
       articleAsync(articleRequestFavorite(token, slug, favorited), articleCurrentSet);
-      // navigate('/');
     }
   };
   const [src, setSrc] = useState<string>(avatarDefaultImage);
@@ -89,9 +79,14 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   const showTitle = title.trim() || slug;
   const showDescription = description.trim() || `Description for this article is not present!`;
   const showBody = body.trim() || `Text for this article is not present!`;
+  const content = active ? <ReactMarkdown className={classes.content}>{showBody}</ReactMarkdown> : null;
   const formatedDate = format(new Date(createdAt), 'MMMM d, yyyy');
 
-  const content = active ? <ReactMarkdown className={classes.content}>{showBody}</ReactMarkdown> : null;
+  const tagElements = tagList.map((tag) => (
+    <li key={Math.random()} className={classes.tag}>
+      {tag.trim() || 'Empty tag'}
+    </li>
+  ));
 
   return (
     <div className={classes.article}>
@@ -104,7 +99,9 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
             <button
               type="button"
               onClick={() => like()}
-              className={`${favorited ? classes['like-delete'] : classes['like-post']} ${classes.like}`}
+              className={`${favorited ? classes['like-delete'] : classes['like-post']} ${classes.like} ${
+                currentUser ? '' : classes['like-cursor']
+              }`}
             />
             <span className={classes['like-count']}>{favoritesCount}</span>
           </div>

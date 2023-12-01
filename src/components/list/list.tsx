@@ -6,7 +6,7 @@ import { useActions } from '../../hooks/use-actions';
 import { TArticleCurrent, TUserCurrent } from '../../types/types';
 import { Article } from '../article/article';
 import { Loader } from '../loader/loader';
-import { ErrorMessage } from '../error/error';
+// import { ErrorMessage } from '../error/error';
 import { articlesAllRequestGet } from '../../services/realworld-blog-api/real-world-blog-api';
 import { articlesSet } from '../../redux/actions';
 
@@ -17,11 +17,11 @@ export const List: React.FunctionComponent = () => {
   const { articlesCount } = useTypedSelector((state) => state.articlesInfo);
   const currentArticle = useTypedSelector((state) => state.currentArticle as TArticleCurrent);
   const page = useTypedSelector((state) => state.page);
-  const { loading, error } = useTypedSelector((state) => state.status);
+  const { loading } = useTypedSelector((state) => state.status);
+  // const { loading, error } = useTypedSelector((state) => state.status);
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
 
   const { articleAsync, pageSet, articlesClear } = useActions();
-  // const { articlesGet, pageSet, articlesClear } = useActions();
 
   const limit: number = 5;
   const offset: number = (page - 1) * limit;
@@ -33,10 +33,7 @@ export const List: React.FunctionComponent = () => {
   }
 
   useEffect(() => {
-    // if (userToken) articlesGet(offset, limit, userToken);
-    // articlesGet(offset, limit, userToken);
     articleAsync(articlesAllRequestGet(offset, userToken, limit), articlesSet);
-    // else articlesGet(offset, limit);
 
     return () => {
       articlesClear();
@@ -69,7 +66,7 @@ export const List: React.FunctionComponent = () => {
     </>
   );
 
-  if (error) return <ErrorMessage />;
+  // if (error) return <ErrorMessage />;
 
   const content = loading ? <Loader /> : list;
 

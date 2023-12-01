@@ -5,6 +5,19 @@
   justify-content: flex-start;
 }
 
-.ant-pagination-item-active {
-    background-color: #1677ff;
+:global(.ant-pagination-item) {
+  transition: all .3s;
+  & a {
+    color: var(--text-color, rgba(0, 0, 0, 0.75)) !important;
   }
+}
+
+:global(.ant-pagination-item-active) {
+  background-color: var(--primary-color, #1890ff) !important;
+  &:hover {
+    filter: brightness(1.2);
+  }
+  & a {
+    color: #fff !important;
+  }
+}

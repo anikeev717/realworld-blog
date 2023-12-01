@@ -20,7 +20,6 @@ export const SignIn: React.FunctionComponent = () => {
   } = useForm<TUserLogin>({ mode: 'all' });
 
   const { userAsync } = useActions();
-  // const { getCurrentUser } = useActions();
   const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorLogin>);
 
   useEffect(() => {
@@ -36,13 +35,6 @@ export const SignIn: React.FunctionComponent = () => {
   }, [currentErrors]);
 
   const onSubmit = (user: TUserLogin) => {
-    // getCurrentUser(
-    //   {
-    //     user,
-    //   },
-    //   'post',
-    //   '/login'
-    // );
     userAsync(userRequestPost({ user }, '/login'));
   };
 
@@ -58,7 +50,7 @@ export const SignIn: React.FunctionComponent = () => {
             id="email"
             placeholder="Email address"
             {...register('email', {
-              required: 'Email is required for registration!',
+              required: 'Email is required for login!',
               pattern: {
                 value: /^[a-z0-9]+([._-]?[a-z0-9]+)*@[a-z]*(\.[a-z]{2,5})$/,
                 message: 'Email is not correct!',
@@ -75,7 +67,7 @@ export const SignIn: React.FunctionComponent = () => {
             id="password"
             placeholder="Password"
             {...register('password', {
-              required: 'Password is required for registration!',
+              required: 'Password is required for login!',
               pattern: {
                 value: /[a-z0-9_-]/,
                 message: 'Password is not correct!',

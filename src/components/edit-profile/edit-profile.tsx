@@ -27,7 +27,6 @@ export const EditProfile: React.FunctionComponent = () => {
   });
 
   const { userAsync } = useActions();
-  // const { getCurrentUser } = useActions();
 
   useEffect(() => {
     if (currentErrors) {
@@ -45,7 +44,6 @@ export const EditProfile: React.FunctionComponent = () => {
     const filteredData = dataEntries.filter((entrie) => entrie[1]?.trim());
     if (filteredData.length) {
       const user = Object.fromEntries(filteredData);
-      // getCurrentUser({ user }, 'put', token);
       userAsync(userRequestPut({ user }, token));
     }
   };

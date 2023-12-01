@@ -16,7 +16,6 @@ export const articlesAllRequestGet = (
 });
 
 export const articleRequestGet = (slug: string, token: string | undefined = undefined): AxiosRequestConfig => ({
-  // method: 'GET',
   url: `${apiUrlArticles}/${slug}`,
   headers: token ? { Authorization: `Token ${token}` } : {},
 });

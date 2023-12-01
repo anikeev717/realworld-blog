@@ -6,14 +6,15 @@ import { Article } from '../article/article';
 import { useActions } from '../../hooks/use-actions';
 import { TArticleCurrent, TUserCurrent } from '../../types/types';
 import { Loader } from '../loader/loader';
-import { ErrorMessage } from '../error/error';
+// import { ErrorMessage } from '../error/error';
 import { articleRequestGet } from '../../services/realworld-blog-api/real-world-blog-api';
 import { articleCurrentSet } from '../../redux/actions';
 
 export const WithArticle: React.FunctionComponent = () => {
   const { slug } = useParams();
   const article = useTypedSelector((state) => state.currentArticle as TArticleCurrent);
-  const { loading, error } = useTypedSelector((state) => state.status);
+  const { loading } = useTypedSelector((state) => state.status);
+  // const { loading, error } = useTypedSelector((state) => state.status);
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
 
   const { articleAsync } = useActions();
@@ -28,7 +29,7 @@ export const WithArticle: React.FunctionComponent = () => {
     if (slug) articleAsync(articleRequestGet(slug, userToken), articleCurrentSet);
   }, [slug, userToken]);
 
-  if (error) return <ErrorMessage />;
+  // if (error) return <ErrorMessage />;
 
   const showArticle = article ? <Article {...article} active /> : null;
   const content = loading ? <Loader /> : showArticle;

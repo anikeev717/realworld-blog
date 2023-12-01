@@ -1,19 +1,21 @@
-.status, .message, .link {
-    color: var(--heading-color, rgba(0, 0, 0, 0.85));
-    font-family: "Inter";
-    font-style: normal;
-    font-weight: 400;
-    text-align: center;
+.status,
+.message,
+.link {
+  color: var(--heading-color, rgba(0, 0, 0, 0.85));
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
 }
 .status {
-    font-size: 200px;
+  font-size: 200px;
 }
 .message {
-    font-size: 120px;
+  font-size: 120px;
 }
 .link {
-    font-size: 32px;
-    text-decoration: none;
-    color: var(--info-color, #1890FF);
-    margin-top: 32px;
+  font-size: 32px;
+  text-decoration: none;
+  color: var(--info-color, #1890ff);
+  margin-top: 32px;
 }
