@@ -1,4 +1,4 @@
-import { ErrorMessage } from '../../components/error-message/error-message';
+import { ErrorComponent } from '../../components/error-component/error-component';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 
 interface IIsErrorStatus {
@@ -8,7 +8,7 @@ interface IIsErrorStatus {
 export const IsErrorStatus: React.FunctionComponent<IIsErrorStatus> = ({ children }) => {
   const { error } = useTypedSelector((state) => state.status);
 
-  if (error) return <ErrorMessage />;
+  if (error) return <ErrorComponent />;
 
   return children;
 };

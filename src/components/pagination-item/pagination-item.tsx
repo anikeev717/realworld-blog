@@ -1,14 +1,24 @@
 import React from 'react';
 import { Pagination } from 'antd';
 
-export const PaginationItem: React.FC = () => (
+import { IPageAction } from '../../types/types';
+
+interface IPaginatiosProps {
+  limit: number;
+  articlesCount: number;
+  page: number;
+  onChangeFunc: (page: number) => IPageAction;
+}
+
+export const PaginationItem: React.FC<IPaginatiosProps> = ({ limit, articlesCount, page, onChangeFunc }) => (
   <Pagination
-    defaultPageSize={5}
+    defaultPageSize={limit}
     showSizeChanger={false}
     defaultCurrent={1}
-    total={1}
-    current={1}
-    onChange={() => {}}
-    hideOnSinglePage
+    total={articlesCount}
+    current={page}
+    onChange={(targetPage: number) => {
+      onChangeFunc(targetPage);
+    }}
   />
 );

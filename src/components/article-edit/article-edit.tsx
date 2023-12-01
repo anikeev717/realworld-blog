@@ -12,11 +12,11 @@ import { articleFormSchema } from '../../services/form-schema-objects/form-schem
 import { articleRequestPut } from '../../services/realworld-blog-api/real-world-blog-api';
 import { articleCurrentSet } from '../../redux/actions';
 
-type TEditArticleProps = {
+type TArticleEditProps = {
   slug: string;
 };
 
-export const EditArticle: React.FunctionComponent<TEditArticleProps> = ({ slug }) => {
+export const ArticleEdit: React.FunctionComponent<TArticleEditProps> = ({ slug }) => {
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrentIs);
   const currentArticle = useTypedSelector((state) => state.currentArticle as IArticleIs);
   const { loading } = useTypedSelector((state) => state.status);

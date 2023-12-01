@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { useTypedSelector } from '../../hooks/use-typed-selector';
-import { AuthBlock } from '../auth-block/auth-block';
+import { HeaderAuthBlock } from '../header-auth-block/header-auth-block';
 import { TUserCurrent } from '../../types/types';
 import { useActions } from '../../hooks/use-actions';
+import { HeaderGuestBlock } from '../header-guest-block/header-guest-block';
 
 import classes from './header.module.scss';
 
@@ -12,17 +13,7 @@ export const Header: React.FunctionComponent = () => {
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
   const { pageSet } = useActions();
 
-  const notAuthBlock = (
-    <>
-      <Link to="/sign-in" className={classes.link}>
-        Sign In
-      </Link>
-      <Link to="/sign-up" className={`${classes.link} ${classes['link-success']}`}>
-        Sign Up
-      </Link>
-    </>
-  );
-  const content = currentUser ? <AuthBlock {...currentUser} /> : notAuthBlock;
+  const content = currentUser ? <HeaderAuthBlock {...currentUser} /> : <HeaderGuestBlock />;
 
   return (
     <header className={classes.header}>

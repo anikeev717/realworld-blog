@@ -5,9 +5,9 @@ import avatarDefaultImage from '../../assets/images/avatar.svg';
 import { TUserCurrentIs } from '../../types/types';
 import { useActions } from '../../hooks/use-actions';
 
-import classes from './auth-block.module.scss';
+import classes from './header-auth-block.module.scss';
 
-export const AuthBlock = (currentUser: TUserCurrentIs) => {
+export const HeaderAuthBlock = (currentUser: TUserCurrentIs) => {
   const { username, image } = currentUser;
 
   const { userSetLogout, pageSet } = useActions();
@@ -29,7 +29,7 @@ export const AuthBlock = (currentUser: TUserCurrentIs) => {
         to="/sign-in"
         onClick={() => {
           userSetLogout();
-          localStorage.removeItem('userKey');
+          localStorage.removeItem('user');
           pageSet(1);
         }}
         className={`${classes.link} ${classes['link-heading']}`}

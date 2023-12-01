@@ -1,9 +1,9 @@
 import React from 'react';
 import { Alert } from 'antd';
 
-import classes from './error.module.scss';
+import classes from './error-component.module.scss';
 
-export const ErrorMessage: React.FC = () => (
+export const ErrorComponent: React.FC = () => (
   <div className={classes.message}>
     <Alert message="Error" description="Something goes wrong!" type="error" showIcon />
   </div>

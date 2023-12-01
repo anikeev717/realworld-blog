@@ -1,7 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom';
 
 import { useTypedSelector } from '../../hooks/use-typed-selector';
-import { EditArticle } from '../edit-article/edit-article';
+import { ArticleEdit } from '../article-edit/article-edit';
 
 export const WithEditForm = () => {
   const { slug } = useParams();
@@ -9,5 +9,5 @@ export const WithEditForm = () => {
 
   if (!currentArticle) return <Navigate to={`/articles/${slug}`} />;
 
-  return <EditArticle slug={slug!} />;
+  return <ArticleEdit slug={slug!} />;
 };

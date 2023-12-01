@@ -12,7 +12,7 @@ import { articleFormSchema } from '../../services/form-schema-objects/form-schem
 import { articleRequestPost } from '../../services/realworld-blog-api/real-world-blog-api';
 import { articleCurrentSet } from '../../redux/actions';
 
-export const NewArticle: React.FunctionComponent = () => {
+export const ArticleNew: React.FunctionComponent = () => {
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrentIs);
   const { loading } = useTypedSelector((state) => state.status);
   const { articleAsync } = useActions();

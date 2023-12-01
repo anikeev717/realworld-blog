@@ -8,9 +8,9 @@ import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { IErrors, TErrorLogin, TUserLogin } from '../../types/types';
 import { userRequestPost } from '../../services/realworld-blog-api/real-world-blog-api';
 
-import classes from './sign-in.module.scss';
+import classes from './profile-sign-in.module.scss';
 
-export const SignIn: React.FunctionComponent = () => {
+export const ProfileSignIn: React.FunctionComponent = () => {
   const {
     register,
     formState: { errors },
@@ -23,15 +23,10 @@ export const SignIn: React.FunctionComponent = () => {
   const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorLogin>);
 
   useEffect(() => {
-    if (currentErrors) {
-      const { errors: userErrors } = currentErrors;
-      if (userErrors['email or password']) {
-        const inputsErrors = ['email', 'password'] as const;
-        inputsErrors.forEach((name) => setError(name, { message: `email or password is invalid` }));
-      }
-    } else {
-      clearErrors();
-    }
+    if (currentErrors?.errors?.['email or password']) {
+      const inputsErrors = ['email', 'password'] as const;
+      inputsErrors.forEach((name) => setError(name, { message: `email or password is invalid` }));
+    } else clearErrors();
   }, [currentErrors]);
 
   const onSubmit = (user: TUserLogin) => {

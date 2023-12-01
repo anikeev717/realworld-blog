@@ -2,29 +2,30 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
 
 import { Layout } from '../layout/layout';
-import { List } from '../list/list';
+import { ArticlesList } from '../articles-list/articles-list';
 import { WithArticle } from '../with-article/with-article';
-import { SignUp } from '../sign-up/sign-up';
-import { SignIn } from '../sign-in/sign-in';
-import { EditProfile } from '../edit-profile/edit-profile';
+import { ProfileSignUp } from '../profile-sign-up/profile-sign-up';
+import { ProfileSignIn } from '../profile-sign-in/profile-sign-in';
+import { ProfileEdit } from '../profile-edit/profile-edit';
 import { useActions } from '../../hooks/use-actions';
-import { NewArticle } from '../new-article/new-article';
+import { ArticleNew } from '../article-new/article-new';
 import { WithEditForm } from '../with-edit-form/with-edit-form';
 import { IsUserStatus } from '../../hoc/is-user-status/is-user-status';
-import { NotFoundPage } from '../not-found-page/not-found-page';
+import { ErrorNotFoundPage } from '../error-not-found-page/error-not-found-page';
+import { userRequestGet } from '../../services/realworld-blog-api/real-world-blog-api';
 
 export const App: React.FunctionComponent = () => {
-  const { userSetLogin } = useActions();
+  const { userAsync } = useActions();
 
   useEffect(() => {
-    const localStorageUser = localStorage.getItem('userKey');
-    if (localStorageUser) userSetLogin(JSON.parse(localStorageUser));
+    const localToken = localStorage.getItem('user');
+    if (localToken) userAsync(userRequestGet(localToken));
   }, []);
 
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<List />} />
+        <Route index element={<ArticlesList />} />
         <Route path="articles" element={<Navigate to="/" />} />
         <Route path="articles/:slug" element={<WithArticle />} />
         <Route path="articles/:slug/edit" element={<WithEditForm />} />
@@ -32,7 +33,7 @@ export const App: React.FunctionComponent = () => {
           path="new-article"
           element={
             <IsUserStatus status={false}>
-              <NewArticle />
+              <ArticleNew />
             </IsUserStatus>
           }
         />
@@ -40,7 +41,7 @@ export const App: React.FunctionComponent = () => {
           path="sign-up"
           element={
             <IsUserStatus status>
-              <SignUp />
+              <ProfileSignUp />
             </IsUserStatus>
           }
         />
@@ -48,7 +49,7 @@ export const App: React.FunctionComponent = () => {
           path="sign-in"
           element={
             <IsUserStatus status>
-              <SignIn />
+              <ProfileSignIn />
             </IsUserStatus>
           }
         />
@@ -56,11 +57,11 @@ export const App: React.FunctionComponent = () => {
           path="profile"
           element={
             <IsUserStatus status={false}>
-              <EditProfile />
+              <ProfileEdit />
             </IsUserStatus>
           }
         />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<ErrorNotFoundPage />} />
       </Route>
     </Routes>
   );

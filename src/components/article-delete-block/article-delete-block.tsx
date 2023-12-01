@@ -5,7 +5,7 @@ interface IDeleteArticleProps {
   onConfirm: () => void;
 }
 
-export const DeleteArticle: React.FC<IDeleteArticleProps> = ({ onConfirm }) => (
+export const ArticleDeleteBlock: React.FC<IDeleteArticleProps> = ({ onConfirm }) => (
   <Popconfirm
     description="Are you sure to delete this article?"
     onConfirm={() => {

@@ -1,17 +1,16 @@
 import format from 'date-fns/format';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 
 import avatarDefaultImage from '../../assets/images/avatar.svg';
 import { IArticleIs, TUserCurrent } from '../../types/types';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { useActions } from '../../hooks/use-actions';
-import { DeleteArticle } from '../delete-article/delete-article';
 import { getValidImageSrc } from '../../services/get-valid-image-src/get-valid-image-src';
 import { articleRequestDelete, articleRequestFavorite } from '../../services/realworld-blog-api/real-world-blog-api';
 import { articleCurrentSet } from '../../redux/actions';
+import { ActionActionBlock } from '../article-action-block/article-action-block';
 
 import classes from './article.module.scss';
 
@@ -34,33 +33,19 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   const { articleAsync } = useActions();
   const navigate = useNavigate();
 
-  let featuresBlock = null;
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
-  if (currentUser) {
-    const { username: currentUsername, token } = currentUser;
-    if (active && username === currentUsername)
-      featuresBlock = (
-        <div className={classes['button-wrapper']}>
-          <DeleteArticle
-            onConfirm={() => {
-              articleAsync(articleRequestDelete(token, slug), articleCurrentSet, navigate);
-            }}
-          />
-          <Button
-            style={{
-              borderColor: 'var(--success-color, #52C41A)',
-              color: 'var(--success-color, #52C41A)',
-              marginLeft: '12px',
-            }}
-            onClick={() => {
-              navigate(`edit`);
-            }}
-          >
-            Edit
-          </Button>
-        </div>
-      );
-  }
+
+  const actionBlock =
+    currentUser?.username === username && active ? (
+      <ActionActionBlock
+        onConfirm={() => {
+          articleAsync(articleRequestDelete(currentUser?.token, slug), articleCurrentSet, navigate);
+        }}
+        onClick={() => {
+          navigate(`edit`);
+        }}
+      />
+    ) : null;
 
   const like = async () => {
     if (currentUser) {
@@ -113,7 +98,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
           <div className={classes['info-wrapper']}>
             <h4 className={classes['user-name']}>{username}</h4>
             <span className={classes.date}>{formatedDate}</span>
-            {featuresBlock}
+            {actionBlock}
           </div>
           <div className={classes.avatar}>
             <img className={classes.image} src={src} alt="avatar" />

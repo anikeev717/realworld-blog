@@ -19,7 +19,6 @@ import {
   IStatusLoading,
   IStatusSuccess,
   IUserAction,
-  IUserBase,
   IUserSetLogin,
   IUserSetLogout,
   TArticleCurrent,
@@ -29,6 +28,7 @@ import {
   TErrorLogin,
   TErrorRegister,
   TStatusAction,
+  TUserCurrentIs,
 } from '../types/types';
 
 export const statusError = (): IStatusError => ({
@@ -63,7 +63,7 @@ export const pageSet = (page: number): IPageAction => ({
   page,
 });
 
-export const userSetLogin = (user: IUserBase): IUserSetLogin => ({
+export const userSetLogin = (user: TUserCurrentIs): IUserSetLogin => ({
   type: EnumUser.SET_LOGIN_USER,
   user,
 });
@@ -111,10 +111,11 @@ export const userAsync =
     dispatch(errorsClear());
     try {
       const resp = await axios(requestConfig);
-      const { user } = resp.data;
+      const { user }: { user: TUserCurrentIs } = resp.data;
       dispatch(statusSuccess());
       dispatch(userSetLogin(user));
-      localStorage.setItem('userKey', JSON.stringify(user));
+      const { token } = user;
+      localStorage.setItem('user', token);
     } catch (error) {
       const err = error as AxiosError;
       const status: number | undefined = err.response?.status;

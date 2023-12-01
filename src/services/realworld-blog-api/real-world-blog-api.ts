@@ -46,6 +46,11 @@ export const articleRequestFavorite = (token: string, slug: string, favorited: b
   headers: { Authorization: `Token ${token}` },
 });
 
+export const userRequestGet = (token: string) => ({
+  url: apiUrlUsers,
+  headers: { Authorization: `Token ${token}` },
+});
+
 export const userRequestPost = (data: IUser, login: '/login' | '' = '') => ({
   method: 'POST',
   url: `${apiUrlUsers}s${login}`,

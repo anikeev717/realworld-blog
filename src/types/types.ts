@@ -140,7 +140,7 @@ export enum EnumUser {
 
 export interface IUserSetLogin {
   type: EnumUser.SET_LOGIN_USER;
-  user: IUserBase;
+  user: TUserCurrentIs;
 }
 
 export interface IUserSetLogout {

@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 
-import classes from './not-found-page.module.scss';
+import classes from './error-not-found-page.module.scss';
 
-export const NotFoundPage: React.FunctionComponent = () => {
+export const ErrorNotFoundPage: React.FunctionComponent = () => {
   return (
     <>
       <h1 className={classes.status}>404</h1>
