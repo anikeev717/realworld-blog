@@ -6,7 +6,7 @@
 }
 
 :global(.ant-pagination-item) {
-  transition: all .3s;
+  transition: all 0.3s;
   & a {
     color: var(--text-color, rgba(0, 0, 0, 0.75)) !important;
   }

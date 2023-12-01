@@ -71,9 +71,11 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   const [src, setSrc] = useState<string>(avatarDefaultImage);
 
   useEffect(() => {
-    getValidImageSrc(image)
-      .then(() => setSrc(image))
-      .catch(() => setSrc(avatarDefaultImage));
+    if (image !== 'https://static.productionready.io/images/smiley-cyrus.jpg') {
+      getValidImageSrc(image)
+        .then(() => setSrc(image))
+        .catch(() => setSrc(avatarDefaultImage));
+    }
   }, []);
 
   const showTitle = title.trim() || slug;
