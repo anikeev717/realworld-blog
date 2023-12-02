@@ -48,7 +48,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
     ) : null;
 
   const like = async () => {
-    if (currentUser) {
+    if (currentUser && active) {
       const { token } = currentUser;
       articleAsync(articleRequestFavorite(token, slug, favorited), articleCurrentSet);
     }
@@ -87,7 +87,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
               type="button"
               onClick={() => like()}
               className={`${favorited ? classes['like-delete'] : classes['like-post']} ${classes.like} ${
-                currentUser ? '' : classes['like-cursor']
+                currentUser && active ? '' : classes['like-cursor']
               }`}
             />
             <span className={classes['like-count']}>{favoritesCount}</span>

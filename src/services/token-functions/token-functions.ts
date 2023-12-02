@@ -13,5 +13,5 @@ export const setToken = (value: string) => {
 };
 
 export const deleteToken = () => {
-  document.cookie = `Token=;max-age=-1`;
+  document.cookie = `Token=; expires=-1`;
 };

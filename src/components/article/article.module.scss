@@ -189,35 +189,9 @@
   h2 {
     text-align: center;
   }
-  & p {
-    margin-left: 20px;
-  }
   & ul {
-    margin-left: 50px;
     & li {
       line-height: 200%;
     }
   }
 }
-
-// .button {
-//   height: 40px;
-//   font-family: 'Inter';
-//   font-size: 16px;
-//   font-style: normal;
-//   font-weight: 400;
-//   line-height: 22px;
-//   padding: 6px 18px;
-//   margin-left: 12px;
-//   border-radius: 5px;
-//   text-align: center;
-//   background-color: var(--grey-grey-1, #fff);
-//   &-delete {
-//     border: 1px solid var(--highlight-color, #f5222d);
-//     color: var(--highlight-color, #f5222d);
-//   }
-//   &-edit {
-//     border: 1px solid var(--info-color, #1890ff);
-//     color: var(--info-color, #1890ff);
-//   }
-// }
