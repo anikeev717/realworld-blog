@@ -1,5 +1,5 @@
-<div align="center">
-  <img src="blob:https://vercel.com/c0f18fc7-0430-48b3-b45b-74e00dd96a11"/>
+<div id="header" align="center">
+  <img src="https://media.giphy.com/media/M9gbBd9nbDrOTu1Mqx/giphy.gif" width="100"/>
 </div>
 
 [RealWorld Blog](https://realworld-blog-rho.vercel.app/)
