@@ -13,13 +13,14 @@ import { WithEditForm } from '../with-edit-form/with-edit-form';
 import { IsUserStatus } from '../../hoc/is-user-status/is-user-status';
 import { ErrorNotFoundPage } from '../error-not-found-page/error-not-found-page';
 import { userRequestGet } from '../../services/realworld-blog-api/real-world-blog-api';
+import { getToken } from '../../services/token-functions/token-functions';
 
 export const App: React.FunctionComponent = () => {
   const { userAsync } = useActions();
 
   useEffect(() => {
-    const localToken = localStorage.getItem('user');
-    if (localToken) userAsync(userRequestGet(localToken));
+    const cookieToken = getToken();
+    if (cookieToken) userAsync(userRequestGet(cookieToken));
   }, []);
 
   return (

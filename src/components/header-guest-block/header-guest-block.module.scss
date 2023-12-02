@@ -1,24 +1,24 @@
 .link {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 50px;
-    color: var(--heading-color, rgba(0, 0, 0, 0.85));
-    font-family: 'Inter';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 28px;
-    text-decoration: none;
-    border-radius: 5px;
-    padding: 0 20px;
-    margin-left: 20px;
-    &:first-of-type {
-      margin: 0;
-    }
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 50px;
+  color: var(--heading-color, rgba(0, 0, 0, 0.85));
+  font-family: 'Inter';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  text-decoration: none;
+  border-radius: 5px;
+  padding: 0 20px;
+  margin-left: 20px;
+  &:first-of-type {
+    margin: 0;
   }
-  
-  .link-success {
-    color: var(--success-color, #52c41a);
-    border: 1px solid var(--success-color, #52c41a);
-  }
+}
+
+.link-success {
+  color: var(--success-color, #52c41a);
+  border: 1px solid var(--success-color, #52c41a);
+}

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import avatarDefaultImage from '../../assets/images/avatar.svg';
 import { TUserCurrentIs } from '../../types/types';
 import { useActions } from '../../hooks/use-actions';
+import { deleteToken } from '../../services/token-functions/token-functions';
 
 import classes from './header-auth-block.module.scss';
 
@@ -29,7 +30,8 @@ export const HeaderAuthBlock = (currentUser: TUserCurrentIs) => {
         to="/sign-in"
         onClick={() => {
           userSetLogout();
-          localStorage.removeItem('user');
+          // localStorage.removeItem('user');
+          deleteToken();
           pageSet(1);
         }}
         className={`${classes.link} ${classes['link-heading']}`}

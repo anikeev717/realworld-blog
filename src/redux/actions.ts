@@ -30,6 +30,7 @@ import {
   TStatusAction,
   TUserCurrentIs,
 } from '../types/types';
+import { setToken } from '../services/token-functions/token-functions';
 
 export const statusError = (): IStatusError => ({
   type: EnumStatus.GET_STATUS_ERROR,
@@ -115,7 +116,7 @@ export const userAsync =
       dispatch(statusSuccess());
       dispatch(userSetLogin(user));
       const { token } = user;
-      localStorage.setItem('user', token);
+      setToken(token);
     } catch (error) {
       const err = error as AxiosError;
       const status: number | undefined = err.response?.status;
