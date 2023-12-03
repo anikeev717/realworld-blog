@@ -1,5 +1,14 @@
+:root {
+  --form-width: 940px;
+  --submit-button-width: 316px;
+  --delete-button-width: 118px;
+  --add-button-width: 136px;
+  --text-area-height: 168px;
+}
+
 .form {
-  width: 940px;
+  max-width: var(--form-width);
+  width: 100%;
   border-radius: 6px;
   border: 1px solid var(--grey-grey-5, #d9d9d9);
   background: var(--grey-grey-1, #fff);
@@ -46,9 +55,7 @@
 }
 
 .field {
-  // text-align: left;
   border: 1px solid var(--grey-grey-5, #d9d9d9);
-  // margin-top: 2px;
 }
 
 .input {
@@ -71,7 +78,8 @@
     border: 1px solid var(--success-color, #52c41a);
   }
   &-tag {
-    width: 300px;
+    min-width: 150px;
+    width: 100%;
   }
   ::placeholder {
     color: var(--grey-grey-6, #bfbfbf);
@@ -79,12 +87,12 @@
 }
 
 .text-area {
-  height: 168px;
+  height: var(--text-area-height);
   resize: none;
 }
 
 .tags {
-  width: 50%;
+  max-width: 50%;
   position: relative;
 }
 
@@ -94,6 +102,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
   &:not(:last-of-type) {
     margin-bottom: 5px;
   }
@@ -108,7 +117,8 @@
 }
 
 .tag-label {
-  width: 300px;
+  width: 100%;
+  margin-right: 18px;
 }
 
 .error {
@@ -119,7 +129,8 @@
 }
 
 .button {
-  width: 316px;
+  max-width: var(--submit-button-width);
+  width: 100%;
   text-align: center;
   border-radius: 4px;
   background: var(--daybreak-blue-blue-6, #1890ff);
@@ -130,18 +141,50 @@
   font-weight: 400;
   line-height: 24px;
   &-delete {
-    width: 118px;
+    max-width: var(--delete-button-width);
+    width: 100%;
     border: 1px solid var(--highlight-color, #f5222d);
     color: var(--highlight-color, #f5222d);
   }
   &-add {
-    width: 136px;
+    max-width: var(--add-button-width);
+    width: 100%;
     border: 1px solid var(--info-color, #1890ff);
     color: var(--info-color, #1890ff);
     position: absolute;
     bottom: 0px;
     left: 100%;
     margin-left: 18px;
+  }
+}
+
+@media screen and (max-width: 990px) {
+  .tags {
+    max-width: calc(100% - var(--add-button-width) - 18px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .button {
+    margin-top: 21px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .tags {
+    max-width: 100%;
+  }
+  .tag-wrapper {
+    margin-bottom: 5px;
+  }
+  .button {
+    max-width: 100%;
+    margin-top: 0;
+    &-add {
+      position: static;
+      margin: 21px 0 0 0;
+      max-width: 100%;
+    }
   }
 }
 

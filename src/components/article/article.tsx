@@ -1,7 +1,8 @@
 import format from 'date-fns/format';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+// import rehypeRaw from 'rehype-raw';
 
 import avatarDefaultImage from '../../assets/images/avatar.svg';
 import { IArticleIs, TUserCurrent } from '../../types/types';
@@ -10,7 +11,7 @@ import { useActions } from '../../hooks/use-actions';
 import { getValidImageSrc } from '../../services/get-valid-image-src/get-valid-image-src';
 import { articleRequestDelete, articleRequestFavorite } from '../../services/realworld-blog-api/real-world-blog-api';
 import { articleCurrentSet } from '../../redux/actions';
-import { ActionActionBlock } from '../article-action-block/article-action-block';
+import { ArticleActionBlock } from '../article-action-block/article-action-block';
 
 import classes from './article.module.scss';
 
@@ -32,12 +33,13 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
 }) => {
   const { articleAsync } = useActions();
   const navigate = useNavigate();
+  const ref = useRef(null);
 
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
 
   const actionBlock =
     currentUser?.username === username && active ? (
-      <ActionActionBlock
+      <ArticleActionBlock
         onConfirm={() => {
           articleAsync(articleRequestDelete(currentUser?.token, slug), articleCurrentSet, navigate);
         }}
@@ -66,8 +68,9 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   const showTitle = title.trim() || slug;
   const showDescription = description.trim() || `Description for this article is not present!`;
   const showBody = body.trim() || `Text for this article is not present!`;
-  const content = active ? <ReactMarkdown className={classes.content}>{showBody}</ReactMarkdown> : null;
+  const showUsername = username.trim() || `${slug}-author`;
   const formatedDate = format(new Date(createdAt), 'MMMM d, yyyy');
+  const content = active ? <ReactMarkdown className={classes.content}>{showBody}</ReactMarkdown> : null;
 
   const tagElements = tagList.map((tag) => (
     <li key={Math.random()} className={classes.tag}>
@@ -96,7 +99,9 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
         </div>
         <div className={classes['user-info']}>
           <div className={classes['info-wrapper']}>
-            <h4 className={classes['user-name']}>{username}</h4>
+            <h4 ref={ref} className={classes['user-name']}>
+              {showUsername}
+            </h4>
             <span className={classes.date}>{formatedDate}</span>
             {actionBlock}
           </div>

@@ -10,9 +10,10 @@ interface IArticleFormProps {
   formData: UseFormReturn<IArticleNewForm, unknown, undefined>;
   fieldData: UseFieldArrayReturn<IArticleNewForm, 'tags', 'id'>;
   onSubmit: (data: IArticleNewForm) => void;
+  type: 'Create new' | 'Edit';
 }
 
-export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formData, fieldData, onSubmit }) => {
+export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formData, fieldData, onSubmit, type }) => {
   const {
     register,
     formState: { errors },
@@ -28,7 +29,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
   return (
     <form className={classes.form} name="signup-form" onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={classes.fieldset}>
-        <legend className={classes.title}>Create new article</legend>
+        <legend className={classes.title}>{`${type} article`}</legend>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="title">
           Title
           <input
@@ -64,7 +65,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
           <ErrorMessage errors={errors} name="body" as="p" className={classes.error} />
         </label>
         <div className={`${classes.label} ${classes['input-label']} ${classes.tags}`}>
-          Tags
+          <p>Tags</p>
           {tagsError}
           {fields.map(
             (field, index): JSX.Element => (

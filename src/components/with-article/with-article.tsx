@@ -17,12 +17,6 @@ export const WithArticle: React.FunctionComponent = () => {
 
   const { articleAsync } = useActions();
 
-  // let userToken: string | undefined;
-  // if (currentUser) {
-  //   const { token } = currentUser;
-  //   userToken = token;
-  // }
-
   useEffect(() => {
     if (slug) articleAsync(articleRequestGet(slug, currentUser?.token), articleCurrentSet);
   }, [slug, currentUser?.token]);

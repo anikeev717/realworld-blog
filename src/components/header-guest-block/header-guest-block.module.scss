@@ -22,3 +22,9 @@
   color: var(--success-color, #52c41a);
   border: 1px solid var(--success-color, #52c41a);
 }
+
+@media screen and (max-width: 576px) {
+  .link {
+    font-size: 14px;
+  }
+}

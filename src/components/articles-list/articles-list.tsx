@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-// import { Pagination } from 'antd';
 
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { useActions } from '../../hooks/use-actions';

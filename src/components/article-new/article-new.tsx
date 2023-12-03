@@ -44,7 +44,11 @@ export const ArticleNew: React.FunctionComponent = () => {
     articleAsync(articleRequestPost(article, token), articleCurrentSet, navigate);
   };
 
-  const content = loading ? <Loader /> : <ArticleForm formData={formData} fieldData={fieldData} onSubmit={onSubmit} />;
+  const content = loading ? (
+    <Loader />
+  ) : (
+    <ArticleForm formData={formData} fieldData={fieldData} onSubmit={onSubmit} type="Create new" />
+  );
 
   return content;
 };

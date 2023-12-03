@@ -27,7 +27,6 @@ export interface IArticles {
   articles: IArticleIs[] | [];
   articlesCount: number;
 }
-// export type TInitialArticle = Record<string, never>;
 
 export interface IArticleIs {
   slug: string;

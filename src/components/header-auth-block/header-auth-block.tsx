@@ -17,20 +17,24 @@ export const HeaderAuthBlock = (currentUser: TUserCurrentIs) => {
 
   return (
     <>
-      <Link to="/new-article" className={`${classes.link} ${classes['link-success']} ${classes['link-small']}`}>
+      <Link
+        data-tooltip="Create article"
+        to="/new-article"
+        className={`${classes.link} ${classes['link-success']} ${classes['link-small']}`}
+      >
         Create article
       </Link>
-      <Link to="/profile" className={`${classes['link-avatar']} ${classes.link}`}>
+      <Link data-tooltip={username} to="/profile" className={`${classes['link-avatar']} ${classes.link}`}>
         {username}
         <div className={classes.avatar}>
           <img className={classes.image} src={avatarImage} alt="avatar" />
         </div>
       </Link>
       <Link
+        data-tooltip="Log out"
         to="/sign-in"
         onClick={() => {
           userSetLogout();
-          // localStorage.removeItem('user');
           deleteToken();
           pageSet(1);
         }}

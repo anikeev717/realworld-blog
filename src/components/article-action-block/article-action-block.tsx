@@ -9,7 +9,7 @@ interface IArticleActionBlock {
   onClick: () => void;
 }
 
-export const ActionActionBlock: React.FunctionComponent<IArticleActionBlock> = ({ onConfirm, onClick }) => {
+export const ArticleActionBlock: React.FunctionComponent<IArticleActionBlock> = ({ onConfirm, onClick }) => {
   return (
     <div className={classes['button-wrapper']}>
       <ArticleDeleteBlock

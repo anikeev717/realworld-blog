@@ -58,3 +58,18 @@
   width: 100%;
   height: 100%;
 }
+
+@media screen and (max-width: 768px) {
+  .link-avatar {
+    font-size: 0;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .avatar {
+    margin: 0;
+  }
+  .link:not(.link-avatar) {
+    font-size: 14px;
+  }
+}

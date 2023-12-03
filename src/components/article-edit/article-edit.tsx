@@ -58,6 +58,10 @@ export const ArticleEdit: React.FunctionComponent<TArticleEditProps> = ({ slug }
     articleAsync(articleRequestPut(article, token, slug), articleCurrentSet, navigate);
   };
 
-  const content = loading ? <Loader /> : <ArticleForm formData={formData} fieldData={fieldData} onSubmit={onSubmit} />;
+  const content = loading ? (
+    <Loader />
+  ) : (
+    <ArticleForm formData={formData} fieldData={fieldData} onSubmit={onSubmit} type="Edit" />
+  );
   return content;
 };
