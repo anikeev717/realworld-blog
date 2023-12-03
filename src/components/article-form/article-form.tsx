@@ -37,6 +37,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
             type="text"
             id="title"
             placeholder="Title"
+            autoComplete="off"
             {...register('title')}
           />
           <ErrorMessage errors={errors} name="title" as="p" className={classes.error} />
@@ -48,6 +49,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
             type="text"
             id="description"
             placeholder="Title"
+            autoComplete="off"
             {...register('description')}
           />
           <ErrorMessage errors={errors} name="description" as="p" className={classes.error} />
@@ -60,6 +62,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
             }`}
             id="text"
             placeholder="Text"
+            autoComplete="off"
             {...register('body')}
           />
           <ErrorMessage errors={errors} name="body" as="p" className={classes.error} />
@@ -78,27 +81,30 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
                     id={`tags.${index}.name`}
                     type="text"
                     placeholder="Tag"
+                    autoComplete="off"
                     {...register(`tags.${index}.name` as const)}
                   />
                   <ErrorMessage errors={errors} name={`tags.${index}.name`} as="p" className={classes.error} />
                 </label>
-                <input
+                <button
                   type="button"
-                  value="Delete"
                   onClick={() => remove(index)}
                   className={`${classes.input} ${classes['button-delete']}`}
-                />
+                >
+                  Delete
+                </button>
               </div>
             )
           )}
-          <input
+          <button
             type="button"
-            value="Add tag"
             onClick={() => {
               append({ name: '' });
             }}
             className={`${classes.input} ${classes['button-add']}`}
-          />
+          >
+            Add tag
+          </button>
         </div>
         <button className={`${classes.input} ${classes.button}`} type="submit">
           Send

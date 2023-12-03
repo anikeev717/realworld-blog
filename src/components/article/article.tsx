@@ -2,7 +2,7 @@ import format from 'date-fns/format';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { useEffect, useRef, useState } from 'react';
-// import rehypeRaw from 'rehype-raw';
+import rehypeRaw from 'rehype-raw';
 
 import avatarDefaultImage from '../../assets/images/avatar.svg';
 import { IArticleIs, TUserCurrent } from '../../types/types';
@@ -60,7 +60,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   useEffect(() => {
     if (image !== 'https://static.productionready.io/images/smiley-cyrus.jpg') {
       getValidImageSrc(image)
-        .then(() => setSrc(image))
+        .then((data) => (data ? setSrc(image) : setSrc(avatarDefaultImage)))
         .catch(() => setSrc(avatarDefaultImage));
     }
   }, []);
@@ -70,7 +70,11 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   const showBody = body.trim() || `Text for this article is not present!`;
   const showUsername = username.trim() || `${slug}-author`;
   const formatedDate = format(new Date(createdAt), 'MMMM d, yyyy');
-  const content = active ? <ReactMarkdown className={classes.content}>{showBody}</ReactMarkdown> : null;
+  const content = active ? (
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} className={classes.content}>
+      {showBody}
+    </ReactMarkdown>
+  ) : null;
 
   const tagElements = tagList.map((tag) => (
     <li key={Math.random()} className={classes.tag}>

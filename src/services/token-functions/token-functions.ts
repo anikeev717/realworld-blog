@@ -7,7 +7,9 @@ export const getToken = () => {
 
 export const setToken = (value: string) => {
   const date = new Date(Date.now() + 86400e3);
-  const updatedCookie = `${encodeURIComponent('Token')}=${encodeURIComponent(value)}; expires=${date.toUTCString()}`;
+  const updatedCookie = `${encodeURIComponent('Token')}=${encodeURIComponent(
+    value
+  )}; expires=${date.toUTCString()}; samesite=strict;`;
 
   document.cookie = updatedCookie;
 };

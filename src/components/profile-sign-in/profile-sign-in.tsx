@@ -44,6 +44,7 @@ export const ProfileSignIn: React.FunctionComponent = () => {
             type="text"
             id="email"
             placeholder="Email address"
+            autoComplete="email"
             {...register('email', {
               required: 'Email is required for login!',
               pattern: {
@@ -61,6 +62,7 @@ export const ProfileSignIn: React.FunctionComponent = () => {
             type="password"
             id="password"
             placeholder="Password"
+            autoComplete="current-password"
             {...register('password', {
               required: 'Password is required for login!',
               pattern: {

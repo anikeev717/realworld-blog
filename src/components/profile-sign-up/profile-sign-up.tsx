@@ -46,6 +46,7 @@ export const ProfileSignUp: React.FunctionComponent = () => {
             type="text"
             id="username"
             placeholder="Username"
+            autoComplete="username"
             {...register('username', {
               required: 'Username is required for registration!',
               minLength: {
@@ -72,6 +73,7 @@ export const ProfileSignUp: React.FunctionComponent = () => {
             type="text"
             id="email"
             placeholder="Email address"
+            autoComplete="email"
             {...register('email', {
               required: 'Email is required for registration!',
               pattern: {
@@ -89,6 +91,7 @@ export const ProfileSignUp: React.FunctionComponent = () => {
             type="password"
             id="password"
             placeholder="Password"
+            autoComplete="new-password"
             {...register('password', {
               required: 'Password is required for registration!',
               pattern: {
@@ -115,6 +118,7 @@ export const ProfileSignUp: React.FunctionComponent = () => {
             type="password"
             id="repeat"
             placeholder="Password"
+            autoComplete="new-password"
             {...register('repass', {
               required: 'You must repeat your password for registration!',
               validate: (value: string) => (value === watch('password') ? true : 'Password do not match!'),

@@ -58,6 +58,7 @@ export const ProfileEdit: React.FunctionComponent = () => {
             className={`${classes.input} ${classes.field} ${errors.username ? classes['input-error'] : ''}`}
             type="text"
             id="username"
+            autoComplete="username"
             placeholder="Username"
             {...register('username', {
               minLength: {
@@ -95,6 +96,7 @@ export const ProfileEdit: React.FunctionComponent = () => {
             className={`${classes.input} ${classes.field} ${errors.email ? classes['input-error'] : ''}`}
             type="text"
             id="email"
+            autoComplete="email"
             placeholder="Email address"
             {...register('email', {
               pattern: {
@@ -112,6 +114,7 @@ export const ProfileEdit: React.FunctionComponent = () => {
             className={`${classes.input} ${classes.field} ${errors.password ? classes['input-error'] : ''}`}
             type="password"
             id="password"
+            autoComplete="new-password"
             placeholder="New password"
             {...register('password', {
               pattern: {
@@ -137,6 +140,7 @@ export const ProfileEdit: React.FunctionComponent = () => {
             className={`${classes.input} ${classes.field} ${errors.image ? classes['input-error'] : ''}`}
             type="text"
             id="image"
+            autoComplete="photo"
             placeholder="Avatar image"
             {...register('image', {
               validate: async (val) => {
