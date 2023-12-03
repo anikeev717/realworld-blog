@@ -59,7 +59,8 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
 
   useEffect(() => {
     if (image !== 'https://static.productionready.io/images/smiley-cyrus.jpg') {
-      getValidImageSrc(image)
+      const imageUrl = image as unknown as URL;
+      getValidImageSrc(imageUrl)
         .then((data) => (data ? setSrc(image) : setSrc(avatarDefaultImage)))
         .catch(() => setSrc(avatarDefaultImage));
     }
