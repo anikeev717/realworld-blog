@@ -25,11 +25,13 @@ export const ArticlesList: React.FunctionComponent = () => {
 
   useEffect(() => {
     articleAsync(articlesAllRequestGet(offset, currentUser?.token, limit), articlesSet);
+  }, [offset, limit, currentUser?.token, currentArticle]);
 
+  useEffect(() => {
     return () => {
       articlesClear();
     };
-  }, [offset, limit, currentUser?.token, currentArticle]);
+  }, []);
 
   const articlesElements = articles.map((article) => {
     return (

@@ -19,7 +19,7 @@ export const ProfileSignIn: React.FunctionComponent = () => {
     clearErrors,
   } = useForm<TUserLogin>({ mode: 'all' });
 
-  const { userAsync } = useActions();
+  const { userAsync, errorsClear } = useActions();
   const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorLogin>);
 
   useEffect(() => {
@@ -28,6 +28,12 @@ export const ProfileSignIn: React.FunctionComponent = () => {
       inputsErrors.forEach((name) => setError(name, { message: `email or password is invalid` }));
     } else clearErrors();
   }, [currentErrors]);
+
+  useEffect(() => {
+    return () => {
+      errorsClear();
+    };
+  }, []);
 
   const onSubmit = (user: TUserLogin) => {
     userAsync(userRequestPost({ user }, '/login'));

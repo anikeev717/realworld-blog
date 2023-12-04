@@ -26,7 +26,7 @@ export const ProfileEdit: React.FunctionComponent = () => {
     defaultValues: { ...currentValues },
   });
 
-  const { userAsync } = useActions();
+  const { userAsync, errorsClear } = useActions();
 
   useEffect(() => {
     if (currentErrors) {
@@ -38,6 +38,12 @@ export const ProfileEdit: React.FunctionComponent = () => {
       clearErrors();
     }
   }, [currentErrors]);
+
+  useEffect(() => {
+    return () => {
+      errorsClear();
+    };
+  }, []);
 
   const onSubmit = (data: TUserEdit) => {
     const dataEntries = Object.entries(data) as Entries<typeof data>;

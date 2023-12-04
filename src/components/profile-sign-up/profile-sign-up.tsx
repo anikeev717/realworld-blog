@@ -20,7 +20,7 @@ export const ProfileSignUp: React.FunctionComponent = () => {
     watch,
   } = useForm<IUserRegisterForm>({ mode: 'all' });
 
-  const { userAsync } = useActions();
+  const { userAsync, errorsClear } = useActions();
 
   const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorRegister>);
 
@@ -29,6 +29,12 @@ export const ProfileSignUp: React.FunctionComponent = () => {
     if (currentErrors?.errors?.email) setError('email', { message: `Email ${currentErrors.errors.email}` });
     else clearErrors();
   }, [currentErrors]);
+
+  useEffect(() => {
+    return () => {
+      errorsClear();
+    };
+  }, []);
 
   const onSubmit = (data: IUserRegisterForm) => {
     const { agree, repass, ...user } = data;
@@ -126,6 +132,7 @@ export const ProfileSignUp: React.FunctionComponent = () => {
           />
           <ErrorMessage errors={errors} name="repass" as="p" className={classes.error} />
         </label>
+        <div className={classes.line} />
         <div className={classes['wrapper-checkbox']}>
           <label className={`${classes.label} ${classes['checkbox-label']}`} htmlFor="agree">
             <input

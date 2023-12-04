@@ -77,7 +77,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
     </ReactMarkdown>
   ) : null;
 
-  const tagElements = tagList.map((tag) => (
+  const tagElements = tagList.slice(0, 5).map((tag) => (
     <li key={Math.random()} className={classes.tag}>
       {tag.trim() || 'Empty tag'}
     </li>
