@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { useEffect, useRef, useState } from 'react';
 import rehypeRaw from 'rehype-raw';
+import { Tooltip } from 'antd';
 
 import avatarDefaultImage from '../../assets/images/avatar.svg';
 import { IArticleIs, TUserCurrent } from '../../types/types';
@@ -34,6 +35,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   const { articleAsync } = useActions();
   const navigate = useNavigate();
   const ref = useRef(null);
+  const refTag = useRef(null);
 
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
 
@@ -59,17 +61,20 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
 
   useEffect(() => {
     if (image !== 'https://static.productionready.io/images/smiley-cyrus.jpg') {
-      const imageUrl = image as unknown as URL;
-      getValidImageSrc(imageUrl)
-        .then((data) => (data ? setSrc(image) : setSrc(avatarDefaultImage)))
-        .catch(() => setSrc(avatarDefaultImage));
+      getValidImageSrc(image).then((data) => (data ? setSrc(image) : setSrc(avatarDefaultImage)));
     }
   }, []);
 
-  const showTitle = title.trim() || slug;
-  const showDescription = description.trim() || `Description for this article is not present!`;
-  const showBody = body.trim() || `Text for this article is not present!`;
-  const showUsername = username.trim() || `${slug}-author`;
+  const isOverflowed = (refItem: React.MutableRefObject<HTMLElement | null>) => {
+    if (refItem.current !== null) return refItem?.current.scrollWidth > refItem?.current.offsetWidth;
+    return false;
+  };
+
+  const showTitle = title.trim().slice(0, 100) || slug;
+  const showTitleTooltip = isOverflowed(ref) ? showTitle : null;
+  const showDescription = description.trim().slice(0, 250) || `Description for this article is not present!`;
+  const showBody = body.trim().slice(0, 5000) || `Text for this article is not present!`;
+  const showUsername = username.trim().slice(0, 20) || `${slug}-author`;
   const formatedDate = format(new Date(createdAt), 'MMMM d, yyyy');
   const content = active ? (
     <ReactMarkdown rehypePlugins={[rehypeRaw]} className={classes.content}>
@@ -77,20 +82,28 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
     </ReactMarkdown>
   ) : null;
 
-  const tagElements = tagList.slice(0, 5).map((tag) => (
-    <li key={Math.random()} className={classes.tag}>
-      {tag.trim() || 'Empty tag'}
-    </li>
-  ));
+  const tagElements = tagList.slice(0, 5).map((tag) => {
+    const tagTitle = tag.trim().slice(0, 64) || 'Empty tag';
+    const tagTitleTooltip = isOverflowed(refTag) ? tagTitle : null;
+    return (
+      <Tooltip title={tagTitleTooltip} key={Math.random()}>
+        <li ref={refTag} className={classes.tag}>
+          {tagTitle}
+        </li>
+      </Tooltip>
+    );
+  });
 
   return (
     <div className={classes.article}>
       <div className={classes.info}>
         <div className={classes.header}>
           <div className={classes['header-info']}>
-            <Link className={classes.title} to={`/articles/${slug}`}>
-              {showTitle}
-            </Link>
+            <Tooltip title={showTitleTooltip}>
+              <Link ref={ref} className={classes.title} to={`/articles/${slug}`}>
+                {showTitle}
+              </Link>
+            </Tooltip>
             <button
               type="button"
               onClick={() => like()}
@@ -104,9 +117,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
         </div>
         <div className={classes['user-info']}>
           <div className={classes['info-wrapper']}>
-            <h4 ref={ref} className={classes['user-name']}>
-              {showUsername}
-            </h4>
+            <h4 className={classes['user-name']}>{showUsername}</h4>
             <span className={classes.date}>{formatedDate}</span>
             {actionBlock}
           </div>

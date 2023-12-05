@@ -7,6 +7,7 @@ import { useActions } from '../../hooks/use-actions';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { TUserEdit, IErrors, TErrorEdit, TUserCurrentIs } from '../../types/types';
 import { userRequestPut } from '../../services/realworld-blog-api/real-world-blog-api';
+import { getValidImageSrc } from '../../services/get-valid-image-src/get-valid-image-src';
 
 import classes from './profile-edit.module.scss';
 
@@ -152,12 +153,9 @@ export const ProfileEdit: React.FunctionComponent = () => {
               validate: async (val) => {
                 if (val) {
                   if (val === currentImage) return 'The entered value is already current image URL!';
-                  const img = new Image();
-                  img.src = val;
-                  return new Promise((resolve) => {
-                    img.onload = () => resolve(true);
-                    img.onerror = () => resolve('Avatar url is not correct!');
-                  });
+                  const data = (await getValidImageSrc(val)) as unknown as boolean;
+                  if (data) return true;
+                  return 'Avatar url is not correct!';
                 }
                 return true;
               },

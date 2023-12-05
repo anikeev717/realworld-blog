@@ -1,5 +1,6 @@
 $heading-color: rgba(0, 0, 0, 0.85);
 $success-color: #52c41a;
+$info-color: #1890ff;
 
 .link {
   display: flex;
@@ -16,8 +17,13 @@ $success-color: #52c41a;
   font-weight: 400;
   line-height: 28px;
   text-decoration: none;
+  transition: all .5s;
   &:first-of-type {
     margin: 0;
+  }
+  &:hover {
+    color: $info-color;
+    border-color: $info-color;
   }
 }
 

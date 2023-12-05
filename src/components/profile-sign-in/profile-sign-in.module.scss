@@ -99,7 +99,7 @@
 
 // @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Open+Sans&family=Roboto:wght@500&display=swap');
 
-@import "../profile-edit/profile-edit.module.scss";
+@import '../profile-edit/profile-edit.module.scss';
 
 $grey-grey-7: #8c8c8c;
 
@@ -111,5 +111,8 @@ $grey-grey-7: #8c8c8c;
   line-height: 20px;
   & a {
     color: $info-color;
+    &:hover {
+      filter: brightness(1.2);
+    }
   }
 }

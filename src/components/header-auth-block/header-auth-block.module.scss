@@ -26,12 +26,12 @@
 //   border: 1px solid $success-color;
 // }
 
-// .link-heading {
-//   color: $heading-color;
-//   border: 1px solid $heading-color
-// }
+@import '../header-guest-block/header-guest-block.module.scss';
 
-@import "../header-guest-block/header-guest-block.module.scss";
+.link-heading {
+  color: $heading-color;
+  border: 1px solid $heading-color
+}
 
 .link-small {
   padding: 6px 10px;
@@ -45,7 +45,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 0;
-  height: 100%;
+  &:hover .avatar {
+    filter: brightness(1.2);
+  }
+  // height: 100%;
 }
 
 .avatar {
@@ -54,6 +57,7 @@
   height: 46px;
   border-radius: 50%;
   overflow: hidden;
+  transition: all .5s;
 }
 
 .image {
