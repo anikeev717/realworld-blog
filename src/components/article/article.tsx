@@ -70,11 +70,11 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
     return false;
   };
 
-  const showTitle = title.trim().slice(0, 100) || slug;
+  const showTitle = title || slug;
   const showTitleTooltip = isOverflowed(ref) ? showTitle : null;
-  const showDescription = description.trim().slice(0, 250) || `Description for this article is not present!`;
-  const showBody = body.trim().slice(0, 5000) || `Text for this article is not present!`;
-  const showUsername = username.trim().slice(0, 20) || `${slug}-author`;
+  const showDescription = description || `Description for this article is not present!`;
+  const showBody = body || `Text for this article is not present!`;
+  const showUsername = username || `${slug}-author`;
   const formatedDate = format(new Date(createdAt), 'MMMM d, yyyy');
   const content = active ? (
     <ReactMarkdown rehypePlugins={[rehypeRaw]} className={classes.content}>
@@ -83,7 +83,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   ) : null;
 
   const tagElements = tagList.slice(0, 5).map((tag) => {
-    const tagTitle = tag.trim().slice(0, 64) || 'Empty tag';
+    const tagTitle = tag || 'Empty tag';
     const tagTitleTooltip = isOverflowed(refTag) ? tagTitle : null;
     return (
       <Tooltip title={tagTitleTooltip} key={Math.random()}>

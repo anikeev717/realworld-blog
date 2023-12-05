@@ -30,7 +30,7 @@
 
 .link-heading {
   color: $heading-color;
-  border: 1px solid $heading-color
+  border: 1px solid $heading-color;
 }
 
 .link-small {
@@ -57,7 +57,7 @@
   height: 46px;
   border-radius: 50%;
   overflow: hidden;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 .image {

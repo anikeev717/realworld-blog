@@ -25,9 +25,12 @@ export const ProfileSignUp: React.FunctionComponent = () => {
   const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorRegister>);
 
   useEffect(() => {
-    if (currentErrors?.errors?.username) setError('username', { message: `Username ${currentErrors.errors.username}` });
-    if (currentErrors?.errors?.email) setError('email', { message: `Email ${currentErrors.errors.email}` });
-    else clearErrors();
+    if (currentErrors) {
+      const { errors: userErrors } = currentErrors;
+      Object.keys(userErrors).forEach((name) =>
+        setError(name as keyof TErrorRegister, { message: `${name} ${userErrors[name as keyof TErrorRegister]}` })
+      );
+    } else clearErrors();
   }, [currentErrors]);
 
   useEffect(() => {

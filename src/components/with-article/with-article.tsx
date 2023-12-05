@@ -22,7 +22,7 @@ export const WithArticle: React.FunctionComponent = () => {
   }, [slug, currentUser?.token]);
 
   const showArticle = article ? <Article {...article} active /> : null;
-  const content = loading ? <Loader /> : showArticle;
+  const content = loading && !article ? <Loader /> : showArticle;
 
   return content;
 };
