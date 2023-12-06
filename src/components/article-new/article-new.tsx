@@ -23,7 +23,7 @@ export const ArticleNew: React.FunctionComponent = () => {
     defaultValues: { tags: [{ name: '' }] },
     resolver: zodResolver(articleFormSchema),
   });
-  const { control } = formData;
+  const { control, setError } = formData;
 
   const fieldData = useFieldArray({
     control,
@@ -35,13 +35,15 @@ export const ArticleNew: React.FunctionComponent = () => {
   const onSubmit = (data: IArticleNewForm) => {
     const { tags, ...other } = data;
     const tagList = tags.map((el) => el.name);
-    const article = {
-      article: {
-        ...other,
-        tagList,
-      },
-    };
-    articleAsync(articleRequestPost(article, token), articleCurrentSet, navigate);
+    if (!tagList.filter((tag, index, arr) => arr.indexOf(tag) !== index).length) {
+      const article = {
+        article: {
+          ...other,
+          tagList,
+        },
+      };
+      articleAsync(articleRequestPost(article, token), articleCurrentSet, navigate);
+    } else setError('root.tags', { message: 'You need to delete all duplicate tags for create article!' });
   };
 
   const content = loading ? (

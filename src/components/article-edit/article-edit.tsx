@@ -37,7 +37,7 @@ export const ArticleEdit: React.FunctionComponent<TArticleEditProps> = ({ slug }
     },
     resolver: zodResolver(articleFormSchema),
   });
-  const { control } = formData;
+  const { control, setError } = formData;
 
   const fieldData = useFieldArray({
     control,
@@ -49,13 +49,15 @@ export const ArticleEdit: React.FunctionComponent<TArticleEditProps> = ({ slug }
   const onSubmit = (data: IArticleNewForm) => {
     const { tags, ...other } = data;
     const tagList = tags.map((el) => el.name);
-    const article = {
-      article: {
-        ...other,
-        tagList,
-      },
-    };
-    articleAsync(articleRequestPut(article, token, slug), articleCurrentSet, navigate);
+    if (!tagList.filter((tag, index, arr) => arr.indexOf(tag) !== index).length) {
+      const article = {
+        article: {
+          ...other,
+          tagList,
+        },
+      };
+      articleAsync(articleRequestPut(article, token, slug), articleCurrentSet, navigate);
+    } else setError('root.tags', { message: 'You need to delete all duplicate tags for edit article!' });
   };
 
   const content = loading ? (
