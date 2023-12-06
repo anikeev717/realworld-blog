@@ -6,7 +6,7 @@ import rehypeRaw from 'rehype-raw';
 import { Tooltip } from 'antd';
 
 import avatarDefaultImage from '../../assets/images/avatar.svg';
-import { IArticleIs, TUserCurrent } from '../../types/types';
+import { IArticleIs, TArticleCurrent, TUserCurrent } from '../../types/types';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { useActions } from '../../hooks/use-actions';
 import { getValidImageSrc } from '../../services/get-valid-image-src/get-valid-image-src';
@@ -38,6 +38,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   const refTag = useRef(null);
 
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
+  const currentArticle = useTypedSelector((state) => state.currentArticle as TArticleCurrent);
 
   const actionBlock =
     currentUser?.username === username && active ? (
@@ -51,13 +52,16 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
       />
     ) : null;
 
-  const like = async () => {
-    if (currentUser && active) {
+  const [src, setSrc] = useState<string>(avatarDefaultImage);
+  const [like, setLike] = useState<boolean>(favorited);
+  const [likeCount, setLikeCount] = useState<number>(favoritesCount);
+
+  const toLike = async () => {
+    if (currentUser) {
       const { token } = currentUser;
-      articleAsync(articleRequestFavorite(token, slug, favorited), articleCurrentSet);
+      articleAsync(articleRequestFavorite(token, slug, like), articleCurrentSet);
     }
   };
-  const [src, setSrc] = useState<string>(avatarDefaultImage);
 
   useEffect(() => {
     if (image !== 'https://static.productionready.io/images/smiley-cyrus.jpg') {
@@ -65,16 +69,31 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (currentArticle) {
+      const { favorited: curFavorited, slug: curSlug, favoritesCount: curCount } = currentArticle;
+      if (slug === curSlug) {
+        setLike(curFavorited);
+        setLikeCount(curCount);
+      }
+    }
+  }, [currentArticle]);
+
   const isOverflowed = (refItem: React.MutableRefObject<HTMLElement | null>) => {
     if (refItem.current !== null) return refItem?.current.scrollWidth > refItem?.current.offsetWidth;
     return false;
   };
 
-  const showTitle = title || slug;
+  const isUndefined = (articlesText: string | undefined, message: string, limit: number) => {
+    if (!articlesText) return message;
+    return articlesText.trim().slice(0, limit) || message;
+  };
+
+  const showTitle = isUndefined(title, slug, 128);
   const showTitleTooltip = isOverflowed(ref) ? showTitle : null;
-  const showDescription = description || `Description for this article is not present!`;
-  const showBody = body || `Text for this article is not present!`;
-  const showUsername = username || `${slug}-author`;
+  const showDescription = isUndefined(description, `Description for this article is not present!`, 256);
+  const showBody = isUndefined(body, `Text for this article is not present!`, 4096);
+  const showUsername = isUndefined(username, `${slug}-author`, 20);
   const formatedDate = format(new Date(createdAt), 'MMMM d, yyyy');
   const content = active ? (
     <ReactMarkdown rehypePlugins={[rehypeRaw]} className={classes.content}>
@@ -83,7 +102,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   ) : null;
 
   const tagElements = tagList.slice(0, 5).map((tag) => {
-    const tagTitle = tag || 'Empty tag';
+    const tagTitle = isUndefined(tag, 'Empty tag', 128);
     const tagTitleTooltip = isOverflowed(refTag) ? tagTitle : null;
     return (
       <Tooltip title={tagTitleTooltip} key={Math.random()}>
@@ -106,12 +125,12 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
             </Tooltip>
             <button
               type="button"
-              onClick={() => like()}
-              className={`${favorited ? classes['like-delete'] : classes['like-post']} ${classes.like} ${
-                currentUser && active ? '' : classes['like-cursor']
+              onClick={() => toLike()}
+              className={`${like ? classes['like-delete'] : classes['like-post']} ${classes.like} ${
+                currentUser ? '' : classes['like-cursor']
               }`}
             />
-            <span className={classes['like-count']}>{favoritesCount}</span>
+            <span className={classes['like-count']}>{likeCount}</span>
           </div>
           <ul className={classes['tags-list']}>{tagElements}</ul>
         </div>

@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { useActions } from '../../hooks/use-actions';
-import { TArticleCurrent, TUserCurrent } from '../../types/types';
+import { TUserCurrent } from '../../types/types';
+// import { TArticleCurrent, TUserCurrent } from '../../types/types';
 import { Article } from '../article/article';
 import { Loader } from '../loader/loader';
 import { articlesAllRequestGet } from '../../services/realworld-blog-api/real-world-blog-api';
@@ -13,33 +14,33 @@ import classes from './articles-list.module.scss';
 
 export const ArticlesList: React.FunctionComponent = () => {
   const { articles, articlesCount } = useTypedSelector((state) => state.articlesInfo);
-  const currentArticle = useTypedSelector((state) => state.currentArticle as TArticleCurrent);
+  // const currentArticle = useTypedSelector((state) => state.currentArticle as TArticleCurrent);
   const page = useTypedSelector((state) => state.page);
   const { loading } = useTypedSelector((state) => state.status);
   const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
 
-  const { articleAsync, pageSet, articlesClear } = useActions();
+  const { articleAsync, pageSet, articlesClear, articleCurrentSet } = useActions();
 
   const limit: number = 5;
   const offset: number = (page - 1) * limit;
 
   useEffect(() => {
     articleAsync(articlesAllRequestGet(offset, currentUser?.token, limit), articlesSet);
-  }, [offset, limit, currentUser?.token, currentArticle]);
-
-  useEffect(() => {
     return () => {
       articlesClear();
+      articleCurrentSet({ article: null });
     };
-  }, []);
+  }, [offset, limit, currentUser?.token]);
 
-  const articlesElements = articles.map((article) => {
-    return (
-      <li key={article.createdAt}>
-        <Article {...article} />
-      </li>
-    );
-  });
+  const articlesElements = articles.length
+    ? articles.map((article) => {
+        return (
+          <li key={article.createdAt}>
+            <Article {...article} />
+          </li>
+        );
+      })
+    : null;
 
   const list = (
     <>
@@ -50,7 +51,7 @@ export const ArticlesList: React.FunctionComponent = () => {
     </>
   );
 
-  const content = loading ? <Loader /> : list;
+  const content = loading && !articles.length ? <Loader /> : list;
 
   return content;
 };

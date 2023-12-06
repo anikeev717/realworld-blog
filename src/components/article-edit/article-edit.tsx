@@ -26,7 +26,7 @@ export const ArticleEdit: React.FunctionComponent<TArticleEditProps> = ({ slug }
   const { title: curTitile, body: curBody, description: curDescription, tagList: curTags } = currentArticle;
 
   const formData = useForm<IArticleNewForm>({
-    mode: 'onSubmit',
+    mode: 'all',
     defaultValues: {
       title: curTitile,
       body: curBody,

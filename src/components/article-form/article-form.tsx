@@ -18,13 +18,11 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
     register,
     formState: { errors },
     handleSubmit,
+    setError,
+    clearErrors,
   } = formData;
 
   const { append, fields, remove } = fieldData;
-
-  const tagsError = <ErrorMessage errors={errors} name="tags.root" as="p" className={classes.error} /> || (
-    <ErrorMessage errors={errors} name="tags" as="p" className={classes.error} />
-  );
 
   return (
     <form className={classes.form} name="signup-form" onSubmit={handleSubmit(onSubmit)}>
@@ -69,7 +67,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
         </label>
         <div className={`${classes.label} ${classes['input-label']} ${classes.tags}`}>
           <p>Tags</p>
-          {tagsError}
+          <ErrorMessage errors={errors} name="root.tags" as="p" className={classes.error} />
           {fields.map(
             (field, index): JSX.Element => (
               <div key={field.id} className={classes['tag-wrapper']}>
@@ -88,7 +86,10 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
                 </label>
                 <button
                   type="button"
-                  onClick={() => remove(index)}
+                  onClick={() => {
+                    remove(index);
+                    clearErrors('root.tags');
+                  }}
                   className={`${classes.input} ${classes['button-delete']}`}
                 >
                   Delete
@@ -99,7 +100,12 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
           <button
             type="button"
             onClick={() => {
-              append({ name: '' });
+              if (fields.length < 5) {
+                append({ name: '' });
+              } else
+                setError('root.tags', {
+                  message: 'Tags count limit is 5 items! You reach maximum!',
+                });
             }}
             className={`${classes.input} ${classes['button-add']}`}
           >
