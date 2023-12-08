@@ -8,8 +8,8 @@ import { useActions } from '../../hooks/use-actions';
 import { IArticleNewForm, TUserCurrentIs } from '../../types/types';
 import { Loader } from '../loader/loader';
 import { ArticleForm } from '../article-form/article-form';
-import { articleFormSchema } from '../../services/form-schema-objects/form-schema-objects';
-import { articleRequestPost } from '../../services/realworld-blog-api/real-world-blog-api';
+import { articleFormSchema } from '../../services/form-schema-objects';
+import { articleRequestPost } from '../../services/real-world-blog-api';
 import { articleCurrentSet } from '../../redux/actions';
 
 export const ArticleNew: React.FunctionComponent = () => {

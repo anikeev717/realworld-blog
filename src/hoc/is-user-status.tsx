@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 
-import { useTypedSelector } from '../../hooks/use-typed-selector';
+import { useTypedSelector } from '../hooks/use-typed-selector';
 
 interface IIsUserStatusProps {
   status: boolean;

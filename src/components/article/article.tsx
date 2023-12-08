@@ -1,37 +1,38 @@
-import format from 'date-fns/format';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import rehypeRaw from 'rehype-raw';
 import { Tooltip } from 'antd';
 
-import avatarDefaultImage from '../../assets/images/avatar.svg';
 import { IArticleIs, TArticleCurrent, TUserCurrent } from '../../types/types';
+import { useTransform } from '../../hooks/use-transform';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { useActions } from '../../hooks/use-actions';
-import { getValidImageSrc } from '../../services/get-valid-image-src/get-valid-image-src';
-import { articleRequestDelete, articleRequestFavorite } from '../../services/realworld-blog-api/real-world-blog-api';
+import { useLike } from '../../hooks/use-like';
+import { isOverflowed } from '../../services/is-overflowed';
+import { articleRequestDelete, articleRequestFavorite } from '../../services/real-world-blog-api';
 import { articleCurrentSet } from '../../redux/actions';
 import { ArticleActionBlock } from '../article-action-block/article-action-block';
 
 import classes from './article.module.scss';
 
-interface IArticleProps extends IArticleIs {
+interface IArticleProps {
+  article: IArticleIs;
   active?: boolean;
 }
 
-export const Article: React.FunctionComponent<IArticleProps> = ({
-  slug,
-  title,
-  description,
-  body,
-  createdAt,
-  tagList,
-  favorited,
-  favoritesCount,
-  author: { username, image },
-  active = false,
-}) => {
+export const Article: React.FunctionComponent<IArticleProps> = ({ article, active }) => {
+  const {
+    slug,
+    title,
+    description,
+    body,
+    createdAt,
+    tagList,
+    favorited,
+    favoritesCount,
+    author: { username, image },
+  } = useTransform(article);
   const { articleAsync } = useActions();
   const navigate = useNavigate();
   const ref = useRef(null);
@@ -52,9 +53,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
       />
     ) : null;
 
-  const [src, setSrc] = useState<string>(avatarDefaultImage);
-  const [like, setLike] = useState<boolean>(favorited);
-  const [likeCount, setLikeCount] = useState<number>(favoritesCount);
+  const { like, likeCount } = useLike(currentArticle, slug, favorited, favoritesCount);
 
   const toLike = async () => {
     if (currentUser) {
@@ -63,51 +62,19 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (image !== 'https://static.productionready.io/images/smiley-cyrus.jpg') {
-      getValidImageSrc(image).then((data) => (data ? setSrc(image) : setSrc(avatarDefaultImage)));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (currentArticle) {
-      const { favorited: curFavorited, slug: curSlug, favoritesCount: curCount } = currentArticle;
-      if (slug === curSlug) {
-        setLike(curFavorited);
-        setLikeCount(curCount);
-      }
-    }
-  }, [currentArticle]);
-
-  const isOverflowed = (refItem: React.MutableRefObject<HTMLElement | null>) => {
-    if (refItem.current !== null) return refItem?.current.scrollWidth > refItem?.current.offsetWidth;
-    return false;
-  };
-
-  const isUndefined = (articlesText: string | undefined, message: string, limit: number) => {
-    if (!articlesText) return message;
-    return articlesText.trim().slice(0, limit) || message;
-  };
-
-  const showTitle = isUndefined(title, slug, 128);
-  const showTitleTooltip = isOverflowed(ref) ? showTitle : null;
-  const showDescription = isUndefined(description, `Description for this article is not present!`, 256);
-  const showBody = isUndefined(body, `Text for this article is not present!`, 4096);
-  const showUsername = isUndefined(username, `${slug}-author`, 20);
-  const formatedDate = format(new Date(createdAt), 'MMMM d, yyyy');
+  const showTitleTooltip = isOverflowed(ref) ? title : null;
   const content = active ? (
     <ReactMarkdown rehypePlugins={[rehypeRaw]} className={classes.content}>
-      {showBody}
+      {body}
     </ReactMarkdown>
   ) : null;
 
-  const tagElements = tagList.slice(0, 5).map((tag) => {
-    const tagTitle = isUndefined(tag, 'Empty tag', 128);
-    const tagTitleTooltip = isOverflowed(refTag) ? tagTitle : null;
+  const tagElements = tagList.map((tag) => {
+    const tagTitleTooltip = isOverflowed(refTag) ? tag : null;
     return (
       <Tooltip title={tagTitleTooltip} key={Math.random()}>
         <li ref={refTag} className={classes.tag}>
-          {tagTitle}
+          {tag}
         </li>
       </Tooltip>
     );
@@ -120,7 +87,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
           <div className={classes['header-info']}>
             <Tooltip title={showTitleTooltip}>
               <Link ref={ref} className={classes.title} to={`/articles/${slug}`}>
-                {showTitle}
+                {title}
               </Link>
             </Tooltip>
             <button
@@ -136,16 +103,16 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
         </div>
         <div className={classes['user-info']}>
           <div className={classes['info-wrapper']}>
-            <h4 className={classes['user-name']}>{showUsername}</h4>
-            <span className={classes.date}>{formatedDate}</span>
+            <h4 className={classes['user-name']}>{username}</h4>
+            <span className={classes.date}>{createdAt}</span>
             {actionBlock}
           </div>
           <div className={classes.avatar}>
-            <img className={classes.image} src={src} alt="avatar" />
+            <img className={classes.image} src={image} alt="avatar" />
           </div>
         </div>
       </div>
-      <div className={classes.description}>{showDescription}</div>
+      <div className={classes.description}>{description}</div>
       {content}
     </div>
   );

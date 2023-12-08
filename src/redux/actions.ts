@@ -30,7 +30,7 @@ import {
   TStatusAction,
   TUserCurrentIs,
 } from '../types/types';
-import { setToken } from '../services/token-functions/token-functions';
+import { setToken } from '../services/token-functions';
 
 export const statusError = (): IStatusError => ({
   type: EnumStatus.GET_STATUS_ERROR,

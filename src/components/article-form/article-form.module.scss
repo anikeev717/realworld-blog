@@ -145,11 +145,20 @@ $grey-grey-9: #262626;
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
+  transition: all 0.5s;
+  &:hover {
+    filter: brightness(1.2);
+  }
   &-delete {
     max-width: $delete-button-width;
     width: 100%;
     color: $highlight-color;
     border: 1px solid $highlight-color;
+    transition: all .5s;
+    &:hover {
+      color: $background-color-base;
+      background-color: $highlight-color;
+    }
   }
   &-add {
     position: absolute;
@@ -160,6 +169,11 @@ $grey-grey-9: #262626;
     width: 100%;
     color: $info-color;
     border: 1px solid $info-color;
+    transition: all .5s;
+    &:hover {
+      color: $background-color-base;
+      background-color: $info-color;
+    }
   }
 }
 

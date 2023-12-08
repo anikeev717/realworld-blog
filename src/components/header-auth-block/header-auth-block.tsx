@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import avatarDefaultImage from '../../assets/images/avatar.svg';
 import { TUserCurrentIs } from '../../types/types';
 import { useActions } from '../../hooks/use-actions';
-import { deleteToken } from '../../services/token-functions/token-functions';
+import { deleteToken } from '../../services/token-functions';
 
 import classes from './header-auth-block.module.scss';
 

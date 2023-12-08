@@ -48,7 +48,6 @@
   &:hover .avatar {
     filter: brightness(1.2);
   }
-  // height: 100%;
 }
 
 .avatar {
@@ -80,5 +79,19 @@
   }
   .link:not(.link-avatar) {
     font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .link:not(.link-avatar) {
+    padding: 0 5px;
+    margin-left: 10px;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .link:not(.link-avatar) {
+    font-size: 13px;
   }
 }

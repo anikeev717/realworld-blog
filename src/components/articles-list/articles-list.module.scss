@@ -25,3 +25,9 @@ $info-color: #1890ff;
     color: $background-color-base !important;
   }
 }
+
+@media screen and (max-width: 480px) {
+  :global(.ant-pagination .ant-pagination-item) {
+    margin-inline-end: -2px !important;
+  }
+}

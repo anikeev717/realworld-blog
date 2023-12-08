@@ -6,7 +6,7 @@ import { TUserCurrent } from '../../types/types';
 // import { TArticleCurrent, TUserCurrent } from '../../types/types';
 import { Article } from '../article/article';
 import { Loader } from '../loader/loader';
-import { articlesAllRequestGet } from '../../services/realworld-blog-api/real-world-blog-api';
+import { articlesAllRequestGet } from '../../services/real-world-blog-api';
 import { articlesSet } from '../../redux/actions';
 import { PaginationItem } from '../pagination-item/pagination-item';
 
@@ -36,7 +36,7 @@ export const ArticlesList: React.FunctionComponent = () => {
     ? articles.map((article) => {
         return (
           <li key={article.createdAt}>
-            <Article {...article} />
+            <Article article={article} />
           </li>
         );
       })

@@ -6,8 +6,8 @@ import { Entries } from 'type-fest';
 import { useActions } from '../../hooks/use-actions';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { TUserEdit, IErrors, TErrorEdit, TUserCurrentIs } from '../../types/types';
-import { userRequestPut } from '../../services/realworld-blog-api/real-world-blog-api';
-import { getValidImageSrc } from '../../services/get-valid-image-src/get-valid-image-src';
+import { userRequestPut } from '../../services/real-world-blog-api';
+import { getValidImageSrc } from '../../services/get-valid-image-src';
 
 import classes from './profile-edit.module.scss';
 

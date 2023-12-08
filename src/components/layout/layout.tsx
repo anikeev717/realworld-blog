@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { Header } from '../header/header';
-import { IsErrorStatus } from '../../hoc/is-error-status/is-error-status';
+import { IsErrorStatus } from '../../hoc/is-error-status';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { useActions } from '../../hooks/use-actions';
 

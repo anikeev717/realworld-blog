@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 
-import { IArticleNew, IUser } from '../../types/types';
+import { IArticleNew, IUser } from '../types/types';
 
 const apiUrlBase = 'https://blog.kata.academy/api';
 const apiUrlArticles = `${apiUrlBase}/articles`;

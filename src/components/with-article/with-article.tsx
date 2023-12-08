@@ -6,7 +6,7 @@ import { Article } from '../article/article';
 import { useActions } from '../../hooks/use-actions';
 import { TArticleCurrent, TUserCurrent } from '../../types/types';
 import { Loader } from '../loader/loader';
-import { articleRequestGet } from '../../services/realworld-blog-api/real-world-blog-api';
+import { articleRequestGet } from '../../services/real-world-blog-api';
 import { articleCurrentSet } from '../../redux/actions';
 
 export const WithArticle: React.FunctionComponent = () => {
@@ -21,7 +21,7 @@ export const WithArticle: React.FunctionComponent = () => {
     if (slug) articleAsync(articleRequestGet(slug, currentUser?.token), articleCurrentSet);
   }, [slug, currentUser?.token]);
 
-  const showArticle = article ? <Article {...article} active /> : null;
+  const showArticle = article ? <Article article={article} active /> : null;
   const content = loading && !article ? <Loader /> : showArticle;
 
   return content;

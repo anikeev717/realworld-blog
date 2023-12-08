@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useActions } from '../../hooks/use-actions';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { IErrors, TErrorLogin, TUserLogin } from '../../types/types';
-import { userRequestPost } from '../../services/realworld-blog-api/real-world-blog-api';
+import { userRequestPost } from '../../services/real-world-blog-api';
 
 import classes from './profile-sign-in.module.scss';
 

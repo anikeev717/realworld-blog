@@ -10,10 +10,10 @@ import { ProfileEdit } from '../profile-edit/profile-edit';
 import { useActions } from '../../hooks/use-actions';
 import { ArticleNew } from '../article-new/article-new';
 import { WithEditForm } from '../with-edit-form/with-edit-form';
-import { IsUserStatus } from '../../hoc/is-user-status/is-user-status';
+import { IsUserStatus } from '../../hoc/is-user-status';
 import { ErrorNotFoundPage } from '../error-not-found-page/error-not-found-page';
-import { userRequestGet } from '../../services/realworld-blog-api/real-world-blog-api';
-import { getToken } from '../../services/token-functions/token-functions';
+import { userRequestGet } from '../../services/real-world-blog-api';
+import { getToken } from '../../services/token-functions';
 
 export const App: React.FunctionComponent = () => {
   const { userAsync } = useActions();

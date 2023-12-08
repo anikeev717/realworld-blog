@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 
-import { IStatusSuccess } from '../../types/types';
-import { ErrorComponent } from '../../components/error-component/error-component';
+import { IStatusSuccess } from '../types/types';
+import { ErrorComponent } from '../components/error-component/error-component';
 
 interface IsErrorStatusProps {
   children: ReactNode;

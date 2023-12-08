@@ -214,6 +214,9 @@ $heading-color: rgba(0, 0, 0, 0.85);
 }
 
 @media screen and (max-width: 768px) {
+  .title {
+    font-size: 18px;
+  }
   .header {
     width: 60%;
   }
@@ -223,6 +226,9 @@ $heading-color: rgba(0, 0, 0, 0.85);
 }
 
 @media screen and (max-width: 480px) {
+  .title {
+    font-size: 16px;
+  }
   .user-info {
     width: 40%;
   }
@@ -235,6 +241,28 @@ $heading-color: rgba(0, 0, 0, 0.85);
     height: 36px;
   }
   .user-name {
+    font-size: 13px;
+  }
+  .date {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .title {
     font-size: 14px;
+  }
+  .header {
+    width: 70%;
+  }
+  .user-info {
+    width: 30%;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+  }
+  .info-wrapper {
+    max-width: 100%;
+    margin: 0;
   }
 }
