@@ -154,7 +154,7 @@ $grey-grey-9: #262626;
     width: 100%;
     color: $highlight-color;
     border: 1px solid $highlight-color;
-    transition: all .5s;
+    transition: all 0.5s;
     &:hover {
       color: $background-color-base;
       background-color: $highlight-color;
@@ -169,7 +169,7 @@ $grey-grey-9: #262626;
     width: 100%;
     color: $info-color;
     border: 1px solid $info-color;
-    transition: all .5s;
+    transition: all 0.5s;
     &:hover {
       color: $background-color-base;
       background-color: $info-color;
