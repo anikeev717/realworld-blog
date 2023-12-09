@@ -2,6 +2,7 @@ $content-width: 880px;
 $description-width: 682px;
 $background-color-base: #fff;
 $info-color: #1890ff;
+$highlight-color: #f5222d;
 $text-color: rgba(0, 0, 0, 0.75);
 $text-color-secondary: rgba(0, 0, 0, 0.5);
 $heading-color: rgba(0, 0, 0, 0.85);
@@ -59,28 +60,58 @@ $heading-color: rgba(0, 0, 0, 0.85);
   margin-left: 13px;
   background-color: transparent;
   outline: none;
-  &::before {
-    margin-right: 3px;
-    width: 16px;
-    height: 16px;
-  }
+  margin-right: 3px;
+  transition: all .3s;
 }
 
 .like-post {
-  &::before {
-    content: url('../../assets/images/tolike.svg');
+  & .border {
+    fill: $background-color-base;
+  }
+  & .border {
+    fill: $heading-color
+  }
+}
+
+@keyframes like {
+
+  0% {
+   scale: 100%;
+  }
+
+  30% {
+    scale: 150%;
+  }
+  100% {
+    scale: 100%;
+  }
+}
+
+.like-hover:hover{
+  scale: 125%;
+  filter: drop-shadow(0px 0px 4px $highlight-color);
+  .border {
+    fill: $highlight-color;
   }
 }
 
 .like-delete {
-  &::before {
-    content: url('../../assets/images/liked.svg');
+  animation: like 0.5s ease-out forwards;
+  & .border, .field {
+    fill: $highlight-color;
+  }
+  &:hover{
+    .border, .field {
+      opacity: 0.5;
+    }
+    filter: none;
   }
 }
 
 .like-cursor {
   cursor: auto;
 }
+
 
 .tags-list {
   display: flex;
