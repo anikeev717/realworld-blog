@@ -1,40 +1,32 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { useEffect } from 'react';
 
 import { Layout } from '../layout/layout';
 import { ArticlesList } from '../articles-list/articles-list';
-import { WithArticle } from '../with-article/with-article';
+import { ArticleWrapper } from '../article-wrapper/article-wrapper';
+import { ArticleEditFormWrapper } from '../article-edit-form-wrapper/article-edit-form-wrapper';
+import { IsUserStatus } from '../../hoc/is-user-status';
+import { ArticleForm } from '../article-form/article-form';
 import { ProfileSignUp } from '../profile-sign-up/profile-sign-up';
 import { ProfileSignIn } from '../profile-sign-in/profile-sign-in';
 import { ProfileEdit } from '../profile-edit/profile-edit';
-import { useActions } from '../../hooks/use-actions';
-import { ArticleNew } from '../article-new/article-new';
-import { WithEditForm } from '../with-edit-form/with-edit-form';
-import { IsUserStatus } from '../../hoc/is-user-status';
 import { ErrorNotFoundPage } from '../error-not-found-page/error-not-found-page';
-import { userRequestGet } from '../../services/real-world-blog-api';
-import { getToken } from '../../services/token-functions';
+import { useToken } from '../../hooks/useToken';
 
 export const App: React.FunctionComponent = () => {
-  const { userAsync } = useActions();
-
-  useEffect(() => {
-    const cookieToken = getToken();
-    if (cookieToken) userAsync(userRequestGet(cookieToken));
-  }, []);
+  useToken();
 
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<ArticlesList />} />
         <Route path="articles" element={<Navigate to="/" />} />
-        <Route path="articles/:slug" element={<WithArticle />} />
-        <Route path="articles/:slug/edit" element={<WithEditForm />} />
+        <Route path="articles/:slug" element={<ArticleWrapper />} />
+        <Route path="articles/:slug/edit" element={<ArticleEditFormWrapper />} />
         <Route
           path="new-article"
           element={
             <IsUserStatus status={false}>
-              <ArticleNew />
+              <ArticleForm />
             </IsUserStatus>
           }
         />

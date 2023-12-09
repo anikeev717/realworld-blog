@@ -9,10 +9,8 @@ import { deleteToken } from '../../services/token-functions';
 import classes from './header-auth-block.module.scss';
 
 export const HeaderAuthBlock = (currentUser: TUserCurrentIs) => {
-  const { username, image } = currentUser;
-
   const { userSetLogout, pageSet } = useActions();
-
+  const { username, image } = currentUser;
   const avatarImage = image || avatarDefaultImage;
 
   return (

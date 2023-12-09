@@ -1,33 +1,78 @@
 import React from 'react';
 import { ErrorMessage } from '@hookform/error-message';
-import { UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { IArticleNewForm } from '../../types/types';
+import { useTypedSelector } from '../../hooks/use-typed-selector';
+import { useActions } from '../../hooks/use-actions';
+import { IArticleNewForm, TUserCurrentIs } from '../../types/types';
+import { Loader } from '../loader/loader';
+import { articleFormSchema } from '../../services/form-schema-objects';
+import { articleRequestPost, articleRequestPut } from '../../services/real-world-blog-api';
+import { articleCurrentSet } from '../../redux/actions';
 
 import classes from './article-form.module.scss';
 
-interface IArticleFormProps {
-  formData: UseFormReturn<IArticleNewForm, unknown, undefined>;
-  fieldData: UseFieldArrayReturn<IArticleNewForm, 'tags', 'id'>;
-  onSubmit: (data: IArticleNewForm) => void;
-  type: 'Create new' | 'Edit';
-}
+type TArticleFormProps = {
+  slug?: string;
+  defaultValues?: {
+    title: string;
+    body: string;
+    description: string;
+    tags: { name: string }[] | [];
+  };
+};
 
-export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formData, fieldData, onSubmit, type }) => {
+export const ArticleForm: React.FunctionComponent<TArticleFormProps> = ({ slug, defaultValues }) => {
+  const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrentIs);
+  const { loading } = useTypedSelector((state) => state.status);
+  const { articleAsync } = useActions();
+  const navigate = useNavigate();
+
+  const formData = useForm<IArticleNewForm>({
+    mode: 'all',
+    defaultValues,
+    resolver: zodResolver(articleFormSchema),
+  });
   const {
     register,
     formState: { errors },
     handleSubmit,
     setError,
     clearErrors,
+    control,
   } = formData;
+
+  const fieldData = useFieldArray({
+    control,
+    name: 'tags',
+  });
 
   const { append, fields, remove } = fieldData;
 
-  return (
+  const onSubmit = (data: IArticleNewForm) => {
+    const { tags, ...other } = data;
+    const tagList = tags.map((el) => el.name);
+    if (!tagList.filter((tag, index, arr) => arr.indexOf(tag) !== index).length) {
+      const article = {
+        article: {
+          ...other,
+          tagList,
+        },
+      };
+      articleAsync(
+        slug ? articleRequestPut(article, currentUser.token, slug) : articleRequestPost(article, currentUser.token),
+        articleCurrentSet,
+        navigate
+      );
+    } else setError('root.tags', { message: 'You need to delete all duplicate tags for submit!' });
+  };
+
+  const articleForm = (
     <form className={classes.form} name="signup-form" onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={classes.fieldset}>
-        <legend className={classes.title}>{`${type} article`}</legend>
+        <legend className={classes.title}>{`${slug ? 'Edit' : 'Create new'} article`}</legend>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="title">
           Title
           <input
@@ -118,4 +163,7 @@ export const ArticleForm: React.FunctionComponent<IArticleFormProps> = ({ formDa
       </fieldset>
     </form>
   );
+
+  const content = loading ? <Loader /> : articleForm;
+  return content;
 };

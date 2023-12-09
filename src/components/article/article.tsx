@@ -5,10 +5,11 @@ import rehypeRaw from 'rehype-raw';
 import { Tooltip } from 'antd';
 
 import { IArticleIs, TArticleCurrent, TUserCurrent } from '../../types/types';
-import { useTransform } from '../../hooks/use-transform';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
 import { useActions } from '../../hooks/use-actions';
 import { useLike } from '../../hooks/use-like';
+import { useImage } from '../../hooks/use-image';
+import { useDateString } from '../../hooks/use-date-string';
 import { isOverflowed } from '../../services/is-overflowed';
 import { articleRequestDelete, articleRequestFavorite } from '../../services/real-world-blog-api';
 import { articleCurrentSet } from '../../redux/actions';
@@ -21,8 +22,8 @@ interface IArticleProps {
   active?: boolean;
 }
 
-export const Article: React.FunctionComponent<IArticleProps> = ({ article, active }) => {
-  const {
+export const Article: React.FunctionComponent<IArticleProps> = ({
+  article: {
     slug,
     title,
     description,
@@ -32,14 +33,19 @@ export const Article: React.FunctionComponent<IArticleProps> = ({ article, activ
     favorited,
     favoritesCount,
     author: { username, image },
-  } = useTransform(article);
+  },
+  active,
+}) => {
+  const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
+  const currentArticle = useTypedSelector((state) => state.currentArticle as TArticleCurrent);
+
   const { articleAsync } = useActions();
   const navigate = useNavigate();
   const ref = useRef(null);
   const refTag = useRef(null);
-
-  const currentUser = useTypedSelector((state) => state.currentUser as TUserCurrent);
-  const currentArticle = useTypedSelector((state) => state.currentArticle as TArticleCurrent);
+  const { like, likeCount } = useLike(currentArticle, slug, favorited, favoritesCount);
+  const validImage = useImage(image);
+  const validCreatedAt = useDateString(createdAt);
 
   const actionBlock =
     currentUser?.username === username && active ? (
@@ -52,8 +58,6 @@ export const Article: React.FunctionComponent<IArticleProps> = ({ article, activ
         }}
       />
     ) : null;
-
-  const { like, likeCount } = useLike(currentArticle, slug, favorited, favoritesCount);
 
   const toLike = async () => {
     if (currentUser) {
@@ -121,11 +125,11 @@ export const Article: React.FunctionComponent<IArticleProps> = ({ article, activ
         <div className={classes['user-info']}>
           <div className={classes['info-wrapper']}>
             <h4 className={classes['user-name']}>{username}</h4>
-            <span className={classes.date}>{createdAt}</span>
+            <span className={classes.date}>{validCreatedAt}</span>
             {actionBlock}
           </div>
           <div className={classes.avatar}>
-            <img className={classes.image} src={image} alt="avatar" />
+            <img className={classes.image} src={validImage} alt="avatar" />
           </div>
         </div>
       </div>

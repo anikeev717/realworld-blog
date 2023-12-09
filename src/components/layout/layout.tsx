@@ -9,9 +9,8 @@ import classes from './layout.module.scss';
 
 export const Layout: React.FunctionComponent = () => {
   const { error } = useTypedSelector((state) => state.status);
-  const location = useLocation();
-
   const { statusSuccess } = useActions();
+  const location = useLocation();
   return (
     <div className={classes.app}>
       <Header />

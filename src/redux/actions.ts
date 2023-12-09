@@ -31,6 +31,7 @@ import {
   TUserCurrentIs,
 } from '../types/types';
 import { setToken } from '../services/token-functions';
+import { getTransformedArticle } from '../services/get-transformed-article';
 
 export const statusError = (): IStatusError => ({
   type: EnumStatus.GET_STATUS_ERROR,
@@ -46,7 +47,7 @@ export const statusSuccess = (): IStatusSuccess => ({
 
 export const articlesSet = (data: { articles: IArticleIs[]; articlesCount: number }): IArticlesGet => ({
   type: EnumArticles.SET_ARTICLES,
-  articles: data.articles,
+  articles: data.articles.map((article) => getTransformedArticle(article)),
   articlesCount: data.articlesCount,
 });
 
@@ -56,7 +57,7 @@ export const articlesClear = (): IArticlesClear => ({
 
 export const articleCurrentSet = (data: { article?: TArticleCurrent }): IArticleCurrentSet => ({
   type: EnumArticleIs.SET_CURRENT_ARTICLE,
-  article: data.article || null,
+  article: data.article ? getTransformedArticle(data.article) : null,
 });
 
 export const pageSet = (page: number): IPageAction => ({
