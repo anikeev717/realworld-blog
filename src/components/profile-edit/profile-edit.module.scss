@@ -105,7 +105,13 @@ $grey-grey-9: #262626;
   line-height: 24px;
   text-align: center;
   transition: all 0.5s;
-  &:hover {
+  // &:hover {
+  //   filter: brightness(1.2);
+  // }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
     filter: brightness(1.2);
   }
 }

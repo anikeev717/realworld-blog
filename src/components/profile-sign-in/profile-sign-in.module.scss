@@ -111,8 +111,14 @@ $grey-grey-7: #8c8c8c;
   line-height: 20px;
   & a {
     color: $info-color;
-    &:hover {
-      filter: brightness(1.2);
-    }
+    // &:hover {
+    //   filter: brightness(1.2);
+    // }
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .span a:hover {
+    filter: brightness(1.2);
   }
 }

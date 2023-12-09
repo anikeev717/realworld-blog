@@ -30,10 +30,10 @@ $info-color: #1890ff;
   &:first-of-type {
     margin: 0;
   }
-  &:hover {
-    color: $info-color;
-    border-color: $info-color;
-  }
+  // &:hover {
+  //   color: $info-color;
+  //   border-color: $info-color;
+  // }
 }
 
 .link-wrapper {
@@ -42,6 +42,13 @@ $info-color: #1890ff;
   align-items: center;
   margin-right: 20px;
   height: 100%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: $info-color;
+    border-color: $info-color;
+  }
 }
 
 @media screen and (max-width: 576px) {

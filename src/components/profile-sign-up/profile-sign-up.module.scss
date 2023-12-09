@@ -134,6 +134,7 @@ $grey-grey-8: #595959;
       height: 16px;
       border: 1px solid $info-color;
       border-radius: 2px;
+      cursor: pointer;
     }
     &:checked::before {
       content: url('../../assets/images/checkbox.svg');

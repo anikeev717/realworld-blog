@@ -10,7 +10,7 @@ import { ProfileSignUp } from '../profile-sign-up/profile-sign-up';
 import { ProfileSignIn } from '../profile-sign-in/profile-sign-in';
 import { ProfileEdit } from '../profile-edit/profile-edit';
 import { ErrorNotFoundPage } from '../error-not-found-page/error-not-found-page';
-import { useToken } from '../../hooks/useToken';
+import { useToken } from '../../hooks/use-token';
 
 export const App: React.FunctionComponent = () => {
   useToken();

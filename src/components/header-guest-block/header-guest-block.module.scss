@@ -21,15 +21,22 @@ $info-color: #1890ff;
   &:first-of-type {
     margin: 0;
   }
-  &:hover {
-    color: $info-color;
-    border-color: $info-color;
-  }
+  // &:hover {
+  //   color: $info-color;
+  //   border-color: $info-color;
+  // }
 }
 
 .link-success {
   color: $success-color;
   border: 1px solid $success-color;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: $info-color;
+    border-color: $info-color;
+  }
 }
 
 @media screen and (max-width: 576px) {

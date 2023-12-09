@@ -18,11 +18,17 @@ $info-color: #1890ff;
 
 :global(.ant-pagination-item-active) {
   background-color: $info-color !important;
-  &:hover {
-    filter: brightness(1.2);
-  }
+  // &:hover {
+  //   filter: brightness(1.2);
+  // }
   & a {
     color: $background-color-base !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :global(.ant-pagination-item-active):hover {
+    filter: brightness(1.2);
   }
 }
 

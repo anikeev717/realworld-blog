@@ -43,9 +43,9 @@ $heading-color: rgba(0, 0, 0, 0.85);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  &:hover {
-    filter: brightness(1.2);
-  }
+  // &:hover {
+  //   filter: brightness(1.2);
+  // }
 }
 .like-count {
   margin-left: 5px;
@@ -86,13 +86,13 @@ $heading-color: rgba(0, 0, 0, 0.85);
   }
 }
 
-.like-hover:hover {
-  scale: 125%;
-  filter: drop-shadow(0px 0px 4px $highlight-color);
-  .border {
-    fill: $highlight-color;
-  }
-}
+// .like-hover:hover {
+//   scale: 125%;
+//   filter: drop-shadow(0px 0px 4px $highlight-color);
+//   .border {
+//     fill: $highlight-color;
+//   }
+// }
 
 .like-delete {
   animation: like 0.5s ease-out forwards;
@@ -100,13 +100,13 @@ $heading-color: rgba(0, 0, 0, 0.85);
   .field {
     fill: $highlight-color;
   }
-  &:hover {
-    .border,
-    .field {
-      opacity: 0.5;
-    }
-    filter: none;
-  }
+  // &:hover {
+  //   .border,
+  //   .field {
+  //     opacity: 0.5;
+  //   }
+  //   filter: none;
+  // }
 }
 
 .like-cursor {
@@ -241,6 +241,28 @@ $heading-color: rgba(0, 0, 0, 0.85);
   }
   & iframe {
     width: 100%;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .title:hover {
+    filter: brightness(1.2);
+  }
+
+  .like-hover:hover {
+    scale: 125%;
+    filter: drop-shadow(0px 0px 4px $highlight-color);
+    .border {
+      fill: $highlight-color;
+    }
+  }
+
+  .like-delete:hover {
+    .border,
+    .field {
+      opacity: 0.5;
+    }
+    filter: none;
   }
 }
 
