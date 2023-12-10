@@ -9,11 +9,11 @@ export const setToken = (value: string) => {
   const date = new Date(Date.now() + 86400e3);
   const updatedCookie = `${encodeURIComponent('Token')}=${encodeURIComponent(
     value
-  )}; expires=${date.toUTCString()}; samesite=strict;`;
+  )}; path=/; expires=${date.toUTCString()}; samesite=strict;`;
 
   document.cookie = updatedCookie;
 };
 
 export const deleteToken = () => {
-  document.cookie = `Token=; expires=-1`;
+  document.cookie = `Token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 };

@@ -42,6 +42,7 @@ export const ArticleForm: React.FunctionComponent<TArticleFormProps> = ({ slug, 
     setError,
     clearErrors,
     control,
+    getValues,
   } = formData;
 
   const fieldData = useFieldArray({
@@ -145,12 +146,14 @@ export const ArticleForm: React.FunctionComponent<TArticleFormProps> = ({ slug, 
           <button
             type="button"
             onClick={() => {
-              if (fields.length < 5) {
-                append({ name: '' });
-              } else
-                setError('root.tags', {
-                  message: 'Tags count limit is 5 items! You reach maximum!',
-                });
+              if (!fields.length || getValues(`tags.${fields.length - 1}.name`)) {
+                if (fields.length < 5) {
+                  append({ name: '' });
+                } else
+                  setError('root.tags', {
+                    message: 'Tags count limit is 5 items! You reach maximum!',
+                  });
+              }
             }}
             className={`${classes.input} ${classes['button-add']}`}
           >

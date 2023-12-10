@@ -18,7 +18,7 @@ export const ProfileSignUp: React.FunctionComponent = () => {
     setError,
     clearErrors,
     watch,
-  } = useForm<IUserRegisterForm>({ mode: 'all' });
+  } = useForm<IUserRegisterForm>({ mode: 'all', defaultValues: { agree: true } });
 
   const { userAsync, errorsClear } = useActions();
 
