@@ -1,5 +1,4 @@
-$info-color: #1890ff;
-$heading-color: rgba(0, 0, 0, 0.85);
+@import '../../assets/scss/variable/variable.scss';
 
 .status,
 .message,
@@ -17,8 +16,8 @@ $heading-color: rgba(0, 0, 0, 0.85);
   font-size: 120px;
 }
 .link {
+  margin-top: 32px;
+  color: $info-color;
   font-size: 32px;
   text-decoration: none;
-  color: $info-color;
-  margin-top: 32px;
 }

@@ -1,6 +1,4 @@
-$background-color-base: #fff;
-$text-color: rgba(0, 0, 0, 0.75);
-$info-color: #1890ff;
+@import '../../assets/scss/variable/variable.scss';
 
 .list {
   display: flex;
@@ -18,9 +16,6 @@ $info-color: #1890ff;
 
 :global(.ant-pagination-item-active) {
   background-color: $info-color !important;
-  // &:hover {
-  //   filter: brightness(1.2);
-  // }
   & a {
     color: $background-color-base !important;
   }

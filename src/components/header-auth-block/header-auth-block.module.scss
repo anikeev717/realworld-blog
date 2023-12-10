@@ -1,31 +1,4 @@
-// $heading-color: rgba(0, 0, 0, 0.85);
-// $success-color: #52c41a;
-
-// .link {
-//   display: flex;
-//   justify-content: flex-start;
-//   align-items: center;
-//   margin-left: 20px;
-//   padding: 0 20px;
-//   height: 50px;
-//   color: $heading-color;
-//   border-radius: 5px;
-//   font-family: 'Inter';
-//   font-size: 18px;
-//   font-style: normal;
-//   font-weight: 400;
-//   line-height: 28px;
-//   text-decoration: none;
-//   &:first-of-type {
-//     margin: 0;
-//   }
-// }
-
-// .link-success {
-//   color: $success-color;
-//   border: 1px solid $success-color;
-// }
-
+@import '../../assets/scss/mixins/mixins.scss';
 @import '../header-guest-block/header-guest-block.module.scss';
 
 .link-heading {
@@ -41,13 +14,8 @@
 }
 
 .link-avatar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flexStyle(space-between);
   padding: 0;
-  // &:hover .avatar {
-  //   filter: brightness(1.2);
-  // }
 }
 
 .avatar {
@@ -60,11 +28,7 @@
 }
 
 .image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  @include imageStyle;
 }
 
 @media (hover: hover) and (pointer: fine) {

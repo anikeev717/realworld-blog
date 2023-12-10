@@ -1,17 +1,14 @@
+@import '../../assets/scss/mixins/mixins.scss';
+@import '../../assets/scss/variable/variable.scss';
+
 $content-width: 880px;
 $description-width: 682px;
-$background-color-base: #fff;
-$info-color: #1890ff;
-$highlight-color: #f5222d;
-$text-color: rgba(0, 0, 0, 0.75);
-$text-color-secondary: rgba(0, 0, 0, 0.5);
-$heading-color: rgba(0, 0, 0, 0.85);
 
 .article {
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-bottom: 26px;
+  margin-bottom: 15px;
   padding: 15px 15px 24px 20px;
   width: 100%;
   background: $background-color-base;
@@ -20,9 +17,7 @@ $heading-color: rgba(0, 0, 0, 0.85);
 }
 
 .info {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  @include flexStyle(space-between, flex-start);
   width: 100%;
 }
 .header {
@@ -31,30 +26,17 @@ $heading-color: rgba(0, 0, 0, 0.85);
   width: 70%;
 }
 .header-info {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  @include flexStyle(flex-start);
 }
 .title {
-  color: $info-color;
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 28px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  // &:hover {
-  //   filter: brightness(1.2);
-  // }
+  @include fontStyle($info-color, 20px, 28px);
+  @include overflowStyle;
 }
 .like-count {
+  @include fontStyle($text-color);
   margin-left: 5px;
   width: min-content;
   height: 22px;
-  color: $text-color;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 22px;
 }
 .like {
   margin-left: 13px;
@@ -86,27 +68,12 @@ $heading-color: rgba(0, 0, 0, 0.85);
   }
 }
 
-// .like-hover:hover {
-//   scale: 125%;
-//   filter: drop-shadow(0px 0px 4px $highlight-color);
-//   .border {
-//     fill: $highlight-color;
-//   }
-// }
-
 .like-delete {
   animation: like 0.5s ease-out forwards;
   & .border,
   .field {
     fill: $highlight-color;
   }
-  // &:hover {
-  //   .border,
-  //   .field {
-  //     opacity: 0.5;
-  //   }
-  //   filter: none;
-  // }
 }
 
 .like-cursor {
@@ -114,49 +81,34 @@ $heading-color: rgba(0, 0, 0, 0.85);
 }
 
 .tags-list {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  @include flexStyle(flex-start);
   height: 28px;
   overflow: hidden;
 }
 
 .tag {
+  @include fontStyle($text-color-secondary, 12px, 20px);
+  @include overflowStyle;
   margin: 4px 8px 4px 0;
   padding: 0 6px;
   width: min-content;
   height: 20px;
-  color: $text-color-secondary;
   border: 1px solid $text-color-secondary;
   border-radius: 2px;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 20px;
   text-align: center;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
   &:first-of-type {
     color: $text-color;
     border: 1px solid $text-color;
   }
 }
 .user-name {
+  @include fontStyle($heading-color, 18px, 28px);
+  @include overflowStyle;
   margin-bottom: -4px;
   width: 100%;
-  color: $heading-color;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 28px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 }
 .date {
-  color: $text-color-secondary;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 22px;
+  @include fontStyle($text-color-secondary);
 }
 .avatar {
   width: 46px;
@@ -165,16 +117,10 @@ $heading-color: rgba(0, 0, 0, 0.85);
   overflow: hidden;
 }
 .image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  @include imageStyle;
 }
 .user-info {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  @include flexStyle(flex-end);
   position: relative;
   width: 30%;
 }
@@ -185,14 +131,11 @@ $heading-color: rgba(0, 0, 0, 0.85);
   text-align: right;
 }
 .description {
+  @include fontStyle($text-color);
   display: -webkit-box;
   max-width: $description-width;
   width: 100%;
   height: 45px;
-  color: $text-color;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 22px;
   overflow-wrap: break-word;
   overflow: hidden;
   -webkit-line-clamp: 2;
@@ -200,13 +143,10 @@ $heading-color: rgba(0, 0, 0, 0.85);
 }
 
 .content {
+  @include fontStyle($text-color, 20px);
   margin-top: 25px;
   max-width: $content-width;
   width: 100%;
-  color: $text-color;
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 22px;
   overflow-wrap: break-word;
 
   & h1,
@@ -233,11 +173,7 @@ $heading-color: rgba(0, 0, 0, 0.85);
     }
   }
   & img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+    @include imageStyle;
   }
   & iframe {
     width: 100%;
