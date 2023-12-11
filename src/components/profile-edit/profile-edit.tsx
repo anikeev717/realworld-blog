@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { Entries } from 'type-fest';
 
@@ -54,6 +54,8 @@ export const ProfileEdit: React.FunctionComponent = () => {
       userAsync(userRequestPut({ user }, token));
     }
   };
+
+  const [type, setType] = useState<'password' | 'text'>('password');
 
   return (
     <form className={classes.form} name="edit-form" onSubmit={handleSubmit(onSubmit)}>
@@ -115,11 +117,12 @@ export const ProfileEdit: React.FunctionComponent = () => {
           />
           <ErrorMessage errors={errors} name="email" as="p" className={classes.error} />
         </label>
-        <label className={`${classes.label} ${classes['input-label']}`} htmlFor="password">
+        <label className={`${classes.label} ${classes.password} ${classes['input-label']}`} htmlFor="password">
           New password
           <input
             className={`${classes.input} ${classes.field} ${errors.password ? classes['input-error'] : ''}`}
-            type="password"
+            type={type}
+            // type="password"
             id="password"
             autoComplete="new-password"
             placeholder="New password"
@@ -138,6 +141,13 @@ export const ProfileEdit: React.FunctionComponent = () => {
               },
               validate: (val) => (val?.includes(' ') ? 'Password cannot contain spaces!' : true),
             })}
+          />
+          <button
+            type="button"
+            className={classes['password-toggle']}
+            onClick={() => {
+              setType((prev) => (prev === 'password' ? 'text' : 'password'));
+            }}
           />
           <ErrorMessage errors={errors} name="password" as="p" className={classes.error} />
         </label>

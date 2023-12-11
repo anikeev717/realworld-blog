@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { ErrorMessage } from '@hookform/error-message';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useActions } from '../../hooks/use-actions';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
@@ -43,6 +43,8 @@ export const ProfileSignUp: React.FunctionComponent = () => {
     const { agree, repass, ...user } = data;
     userAsync(userRequestPost({ user }));
   };
+
+  const [type, setType] = useState<'password' | 'text'>('password');
 
   return (
     <form className={classes.form} name="signup-form" onSubmit={handleSubmit(onSubmit)}>
@@ -93,11 +95,12 @@ export const ProfileSignUp: React.FunctionComponent = () => {
           />
           <ErrorMessage errors={errors} name="email" as="p" className={classes.error} />
         </label>
-        <label className={`${classes.label} ${classes['input-label']}`} htmlFor="password">
+        <label className={`${classes.label} ${classes.password} ${classes['input-label']}`} htmlFor="password">
           Password
           <input
             className={`${classes.input} ${classes.field} ${errors.password ? classes['input-error'] : ''}`}
-            type="password"
+            type={type}
+            // type="password"
             id="password"
             placeholder="Password"
             autoComplete="new-password"
@@ -118,13 +121,21 @@ export const ProfileSignUp: React.FunctionComponent = () => {
               validate: (val) => (val?.includes(' ') ? 'Password cannot contain spaces!' : true),
             })}
           />
+          <button
+            type="button"
+            className={classes['password-toggle']}
+            onClick={() => {
+              setType((prev) => (prev === 'password' ? 'text' : 'password'));
+            }}
+          />
           <ErrorMessage errors={errors} name="password" as="p" className={classes.error} />
         </label>
-        <label className={`${classes.label} ${classes['input-label']}`} htmlFor="repeat">
+        <label className={`${classes.label} ${classes.password} ${classes['input-label']}`} htmlFor="repeat">
           Repeat Password
           <input
             className={`${classes.input} ${classes.field} ${errors.repass ? classes['input-error'] : ''}`}
-            type="password"
+            type={type}
+            // type="password"
             id="repeat"
             placeholder="Password"
             autoComplete="new-password"
@@ -132,6 +143,13 @@ export const ProfileSignUp: React.FunctionComponent = () => {
               required: 'You must repeat your password for registration!',
               validate: (value: string) => (value === watch('password') ? true : 'Password do not match!'),
             })}
+          />
+          <button
+            type="button"
+            className={classes['password-toggle']}
+            onClick={() => {
+              setType((prev) => (prev === 'password' ? 'text' : 'password'));
+            }}
           />
           <ErrorMessage errors={errors} name="repass" as="p" className={classes.error} />
         </label>

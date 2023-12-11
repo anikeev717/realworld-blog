@@ -44,6 +44,29 @@
   }
 }
 
+.password {
+  position: relative;
+  & .input[type='text'] + .password-toggle {
+    background-image: url('../../assets/images/passuntoggle.svg');
+  }
+  & .input[type='password'] + .password-toggle {
+    background-image: url('../../assets/images/passtoggle.svg');
+  }
+  & .password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 34px;
+    width: 20px;
+    height: 20px;
+    background: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.5;
+    transition: all 0.5s;
+    outline: none;
+  }
+}
+
 .field {
   margin-top: 2px;
   background: $background-color-base;
@@ -85,5 +108,8 @@
 @media (hover: hover) and (pointer: fine) {
   .button:hover {
     filter: brightness(1.2);
+  }
+  .password-toggle:hover {
+    opacity: 1;
   }
 }
