@@ -12,20 +12,14 @@ interface IArticleActionBlock {
 export const ArticleActionBlock: React.FunctionComponent<IArticleActionBlock> = ({ onConfirm, onClick }) => {
   return (
     <div className={classes['button-wrapper']}>
-      <ArticleDeleteBlock
-        onConfirm={() => {
-          onConfirm();
-        }}
-      />
+      <ArticleDeleteBlock onConfirm={onConfirm} />
       <Button
         style={{
           borderColor: 'var(--success-color, #52C41A)',
           color: 'var(--success-color, #52C41A)',
           marginLeft: '12px',
         }}
-        onClick={() => {
-          onClick();
-        }}
+        onClick={onClick}
       >
         Edit
       </Button>

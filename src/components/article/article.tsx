@@ -50,12 +50,8 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
   const actionBlock =
     currentUser?.username === username && active ? (
       <ArticleActionBlock
-        onConfirm={() => {
-          articleAsync(articleRequestDelete(currentUser?.token, slug), articleCurrentSet, navigate);
-        }}
-        onClick={() => {
-          navigate(`edit`);
-        }}
+        onConfirm={() => articleAsync(articleRequestDelete(currentUser?.token, slug), articleCurrentSet, navigate)}
+        onClick={() => navigate(`edit`)}
       />
     ) : null;
 
@@ -96,7 +92,7 @@ export const Article: React.FunctionComponent<IArticleProps> = ({
             </Tooltip>
             <button
               type="button"
-              onClick={() => toLike()}
+              onClick={toLike}
               className={`${like ? classes['like-delete'] : classes['like-post']} ${classes.like} ${
                 currentUser ? classes['like-hover'] : classes['like-cursor']
               }`}

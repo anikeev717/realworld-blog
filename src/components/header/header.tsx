@@ -17,13 +17,7 @@ export const Header: React.FunctionComponent = () => {
 
   return (
     <header className={classes.header}>
-      <Link
-        to="/"
-        onClick={() => {
-          pageSet(1);
-        }}
-        className={classes.link}
-      >
+      <Link to="/" onClick={() => pageSet(1)} className={classes.link}>
         Realworld Blog
       </Link>
       <div className={classes['link-wrapper']}>{content}</div>

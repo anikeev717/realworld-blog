@@ -8,9 +8,7 @@ interface IDeleteArticleProps {
 export const ArticleDeleteBlock: React.FC<IDeleteArticleProps> = ({ onConfirm }) => (
   <Popconfirm
     description="Are you sure to delete this article?"
-    onConfirm={() => {
-      onConfirm();
-    }}
+    onConfirm={onConfirm}
     placement="right"
     okText="Yes"
     cancelText="No"

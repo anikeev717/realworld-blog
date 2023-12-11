@@ -37,3 +37,21 @@
   height: 1px;
   background: #e8e8e8;
 }
+
+@media screen and (max-width: 480px) {
+  .wrapper-checkbox {
+    padding-right: 16px;
+  }
+  .label.checkbox-label {
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .wrapper-checkbox {
+    padding-right: 0px;
+  }
+  .label.checkbox-label {
+    font-size: 12px;
+  }
+}

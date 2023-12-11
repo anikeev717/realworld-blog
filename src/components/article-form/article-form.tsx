@@ -52,6 +52,22 @@ export const ArticleForm: React.FunctionComponent<TArticleFormProps> = ({ slug, 
 
   const { append, fields, remove } = fieldData;
 
+  const appendTag = () => {
+    if (!fields.length || getValues(`tags.${fields.length - 1}.name`)) {
+      if (fields.length < 5) {
+        append({ name: '' });
+      } else
+        setError('root.tags', {
+          message: 'Tags count limit is 5 items! You reach maximum!',
+        });
+    }
+  };
+
+  const removeTag = (tagIndex: number) => {
+    remove(tagIndex);
+    clearErrors('root.tags');
+  };
+
   const onSubmit = (data: IArticleNewForm) => {
     const { tags, ...other } = data;
     const tagList = tags.map((el) => el.name);
@@ -133,8 +149,7 @@ export const ArticleForm: React.FunctionComponent<TArticleFormProps> = ({ slug, 
                 <button
                   type="button"
                   onClick={() => {
-                    remove(index);
-                    clearErrors('root.tags');
+                    removeTag(index);
                   }}
                   className={`${classes.input} ${classes['button-delete']}`}
                 >
@@ -143,20 +158,7 @@ export const ArticleForm: React.FunctionComponent<TArticleFormProps> = ({ slug, 
               </div>
             )
           )}
-          <button
-            type="button"
-            onClick={() => {
-              if (!fields.length || getValues(`tags.${fields.length - 1}.name`)) {
-                if (fields.length < 5) {
-                  append({ name: '' });
-                } else
-                  setError('root.tags', {
-                    message: 'Tags count limit is 5 items! You reach maximum!',
-                  });
-              }
-            }}
-            className={`${classes.input} ${classes['button-add']}`}
-          >
+          <button type="button" onClick={appendTag} className={`${classes.input} ${classes['button-add']}`}>
             Add tag
           </button>
         </div>

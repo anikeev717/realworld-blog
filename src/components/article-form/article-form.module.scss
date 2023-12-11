@@ -186,4 +186,19 @@ $text-area-height: 168px;
       max-width: 100%;
     }
   }
+  .tag-wrapper:last-of-type .tag-label p {
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .error {
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .error {
+    font-size: 12px;
+  }
 }
