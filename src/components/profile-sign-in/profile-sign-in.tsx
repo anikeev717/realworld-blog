@@ -17,7 +17,7 @@ export const ProfileSignIn: React.FunctionComponent = () => {
     handleSubmit,
     setError,
     clearErrors,
-  } = useForm<TUserLogin>({ mode: 'all' });
+  } = useForm<TUserLogin>({ mode: 'onSubmit' });
 
   const { userAsync, errorsClear } = useActions();
   const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorLogin>);

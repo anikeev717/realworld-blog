@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { Entries } from 'type-fest';
 
@@ -15,6 +15,8 @@ export const ProfileEdit: React.FunctionComponent = () => {
   const { token, ...currentValues } = useTypedSelector((state) => state.currentUser as TUserCurrentIs);
   const { username: currentUsername, email: currentEmail, image: currentImage } = currentValues;
   const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorEdit>);
+  const [userValues, setUser] = useState(currentValues);
+  const refForm = useRef() as React.MutableRefObject<HTMLFormElement>;
 
   const {
     register,
@@ -22,12 +24,25 @@ export const ProfileEdit: React.FunctionComponent = () => {
     handleSubmit,
     setError,
     clearErrors,
+    reset,
   } = useForm<TUserEdit>({
-    mode: 'all',
-    defaultValues: { ...currentValues },
+    mode: 'onSubmit',
+    defaultValues: { ...userValues },
+    // defaultValues: { ...currentValues },
   });
 
   const { userAsync, errorsClear } = useActions();
+
+  useEffect(() => {
+    if (JSON.stringify(userValues) !== JSON.stringify(currentValues)) {
+      setUser(currentValues);
+      reset(currentValues);
+      refForm.current.classList.add(classes['form-success']);
+      setTimeout(() => {
+        refForm.current.classList.remove(classes['form-success']);
+      }, 2000);
+    }
+  }, [currentValues]);
 
   useEffect(() => {
     if (currentErrors) {
@@ -58,7 +73,7 @@ export const ProfileEdit: React.FunctionComponent = () => {
   const [type, setType] = useState<'password' | 'text'>('password');
 
   return (
-    <form className={classes.form} name="edit-form" onSubmit={handleSubmit(onSubmit)}>
+    <form ref={refForm} className={classes.form} name="edit-form" onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={classes.fieldset}>
         <legend className={classes.title}>Edit profile</legend>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="username">
@@ -97,6 +112,13 @@ export const ProfileEdit: React.FunctionComponent = () => {
               },
             })}
           />
+          <button
+            type="button"
+            className={classes.reset}
+            onClick={() => {
+              reset({ username: '' });
+            }}
+          />
           <ErrorMessage errors={errors} name="username" as="p" className={classes.error} />
         </label>
         <label className={`${classes.label} ${classes['input-label']}`} htmlFor="email">
@@ -114,6 +136,13 @@ export const ProfileEdit: React.FunctionComponent = () => {
               },
               validate: (val) => (val === currentEmail ? 'The entered value is already current email!' : true),
             })}
+          />
+          <button
+            type="button"
+            className={classes.reset}
+            onClick={() => {
+              reset({ email: '' });
+            }}
           />
           <ErrorMessage errors={errors} name="email" as="p" className={classes.error} />
         </label>
@@ -170,6 +199,13 @@ export const ProfileEdit: React.FunctionComponent = () => {
                 return true;
               },
             })}
+          />
+          <button
+            type="button"
+            className={classes.reset}
+            onClick={() => {
+              reset({ image: '' });
+            }}
           />
           <ErrorMessage errors={errors} name="image" as="p" className={classes.error} />
         </label>

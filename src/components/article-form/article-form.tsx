@@ -31,7 +31,7 @@ export const ArticleForm: React.FunctionComponent<TArticleFormProps> = ({ slug, 
   const navigate = useNavigate();
 
   const formData = useForm<IArticleNewForm>({
-    mode: 'all',
+    mode: 'onSubmit',
     defaultValues,
     resolver: zodResolver(articleFormSchema),
   });
