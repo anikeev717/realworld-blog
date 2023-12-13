@@ -15,7 +15,6 @@ export const ProfileEdit: React.FunctionComponent = () => {
   const { token, ...currentValues } = useTypedSelector((state) => state.currentUser as TUserCurrentIs);
   const { username: currentUsername, email: currentEmail, image: currentImage } = currentValues;
   const currentErrors = useTypedSelector((state) => state.currentErrors as IErrors<TErrorEdit>);
-  const [userValues, setUser] = useState(currentValues);
   const refForm = useRef() as React.MutableRefObject<HTMLFormElement>;
 
   const {
@@ -27,22 +26,10 @@ export const ProfileEdit: React.FunctionComponent = () => {
     reset,
   } = useForm<TUserEdit>({
     mode: 'onSubmit',
-    defaultValues: { ...userValues },
-    // defaultValues: { ...currentValues },
+    defaultValues: { ...currentValues },
   });
 
   const { userAsync, errorsClear } = useActions();
-
-  useEffect(() => {
-    if (JSON.stringify(userValues) !== JSON.stringify(currentValues)) {
-      setUser(currentValues);
-      reset(currentValues);
-      refForm.current.classList.add(classes['form-success']);
-      setTimeout(() => {
-        refForm.current.classList.remove(classes['form-success']);
-      }, 2000);
-    }
-  }, [currentValues]);
 
   useEffect(() => {
     if (currentErrors) {
@@ -61,12 +48,20 @@ export const ProfileEdit: React.FunctionComponent = () => {
     };
   }, []);
 
+  const onSuccess = (argValue: TUserEdit) => {
+    reset(argValue);
+    refForm.current.classList.add(classes['form-success']);
+    setTimeout(() => {
+      refForm.current.classList.remove(classes['form-success']);
+    }, 2000);
+  };
+
   const onSubmit = (data: TUserEdit) => {
     const dataEntries = Object.entries(data) as Entries<typeof data>;
     const filteredData = dataEntries.filter((entrie) => entrie[1]?.trim());
     if (filteredData.length) {
       const user = Object.fromEntries(filteredData);
-      userAsync(userRequestPut({ user }, token));
+      userAsync(userRequestPut({ user }, token), onSuccess);
     }
   };
 

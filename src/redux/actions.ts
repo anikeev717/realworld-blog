@@ -29,6 +29,7 @@ import {
   TErrorRegister,
   TStatusAction,
   TUserCurrentIs,
+  TUserEdit,
 } from '../types/types';
 import { setToken } from '../services/token-functions';
 import { getTransformedArticle } from '../services/get-transformed-article';
@@ -108,7 +109,8 @@ export const articleAsync =
   };
 
 export const userAsync =
-  (requestConfig: AxiosRequestConfig) => async (dispatch: Dispatch<IUserAction | IErrorsAction | TStatusAction>) => {
+  (requestConfig: AxiosRequestConfig, reset?: (argValue: TUserEdit) => void) =>
+  async (dispatch: Dispatch<IUserAction | IErrorsAction | TStatusAction>) => {
     dispatch(statusLoading());
     dispatch(errorsClear());
     try {
@@ -116,8 +118,9 @@ export const userAsync =
       const { user }: { user: TUserCurrentIs } = resp.data;
       dispatch(statusSuccess());
       dispatch(userSetLogin(user));
-      const { token } = user;
+      const { token, username, email, image } = user;
       setToken(token);
+      if (reset) reset({ username, email, password: '', image });
     } catch (error) {
       const err = error as AxiosError;
       const status: number | undefined = err.response?.status;
