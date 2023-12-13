@@ -180,16 +180,18 @@ $description-width: 682px;
   }
   & a {
     color: $info-color;
-    transition: all .5s;
+    transition: all 0.5s;
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .title:hover, .title:focus-visible {
+  .title:hover,
+  .title:focus-visible {
     filter: brightness(1.2);
   }
 
-  .like-hover:hover, .like-hover:focus-visible {
+  .like-hover:hover,
+  .like-hover:focus-visible {
     scale: 125%;
     filter: drop-shadow(0px 0px 4px $highlight-color);
     .border {
@@ -197,7 +199,8 @@ $description-width: 682px;
     }
   }
 
-  .like-delete:hover, .like-delete:focus-visible {
+  .like-delete:hover,
+  .like-delete:focus-visible {
     .border,
     .field {
       opacity: 0.5;
@@ -205,7 +208,8 @@ $description-width: 682px;
     filter: none;
   }
 
-  .content a:hover, .content a:focus-visible {
+  .content a:hover,
+  .content a:focus-visible {
     filter: brightness(1.2);
   }
 }

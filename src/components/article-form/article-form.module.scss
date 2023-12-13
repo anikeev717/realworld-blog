@@ -144,19 +144,22 @@ $text-area-height: 168px;
 
 @media (hover: hover) and (pointer: fine) {
   .button {
-    &:hover, &:focus-visible {
+    &:hover,
+    &:focus-visible {
       filter: brightness(1.2);
     }
-    &-delete:hover, &-delete:focus-visible {
+    &-delete:hover,
+    &-delete:focus-visible {
       color: $background-color-base;
       background-color: $highlight-color;
     }
-    &-add:hover, &-add:focus-visible {
+    &-add:hover,
+    &-add:focus-visible {
       color: $background-color-base;
       background-color: $info-color;
     }
   }
-  .input:not(button):focus-visible{
+  .input:not(button):focus-visible {
     outline: 2px solid $info-color;
   }
 }

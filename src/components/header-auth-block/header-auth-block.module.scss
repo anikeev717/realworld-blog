@@ -32,7 +32,8 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .link-avatar:hover .avatar, .link-avatar:focus-visible .avatar {
+  .link-avatar:hover .avatar,
+  .link-avatar:focus-visible .avatar {
     filter: brightness(1.2);
   }
 }

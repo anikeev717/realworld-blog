@@ -16,15 +16,15 @@
   border: 1px solid $grey-grey-5;
   border-radius: 6px;
   font-family: 'Roboto';
-  transition: all .5s;
-  &-success{
+  transition: all 0.5s;
+  &-success {
     box-shadow:
-    0px 0.6088px 2.93329px 0px rgba(84, 196, 26, 0.12),
-    0px 1.46302px 7.04911px 0px rgba(84, 196, 26, 0.13),
-    0px 2.75474px 13.27285px 0px rgba(84, 196, 26, 0.14),
-    0px 4.91399px 23.67649px 0px rgba(84, 196, 26, 0.15),
-    0px 9.19107px 44.28427px 0px rgba(84, 196, 26, 0.16),
-    0px 22px 106px 0px rgba(84, 196, 26, 0.17);
+      0px 0.6088px 2.93329px 0px rgba(84, 196, 26, 0.12),
+      0px 1.46302px 7.04911px 0px rgba(84, 196, 26, 0.13),
+      0px 2.75474px 13.27285px 0px rgba(84, 196, 26, 0.14),
+      0px 4.91399px 23.67649px 0px rgba(84, 196, 26, 0.15),
+      0px 9.19107px 44.28427px 0px rgba(84, 196, 26, 0.16),
+      0px 22px 106px 0px rgba(84, 196, 26, 0.17);
     border: 1px solid $success-color;
   }
 }
@@ -54,25 +54,25 @@
   &:last-of-type {
     margin-bottom: 21px;
   }
-    & .input[type='text'] + .password-toggle {
-      background-image: url('../../assets/images/passuntoggle.svg');
-    }
-    & .input[type='password'] + .password-toggle {
-      background-image: url('../../assets/images/passtoggle.svg');
-    }
-    & .password-toggle {
-      position: absolute;
-      right: 10px;
-      top: 34px;
-      width: 20px;
-      height: 20px;
-      background: none;
-      background-repeat: no-repeat;
-      background-size: contain;
-      opacity: 0.5;
-      transition: all 0.5s;
-      outline: none;
-    }
+  & .input[type='text'] + .password-toggle {
+    background-image: url('../../assets/images/passuntoggle.svg');
+  }
+  & .input[type='password'] + .password-toggle {
+    background-image: url('../../assets/images/passtoggle.svg');
+  }
+  & .password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 34px;
+    width: 20px;
+    height: 20px;
+    background: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.5;
+    transition: all 0.5s;
+    outline: none;
+  }
 }
 
 .field {
@@ -121,9 +121,10 @@
   outline: none;
   background: none;
   opacity: 0.5;
-  transition: all .5s;
-  &::before, &::after{
-    content:'';
+  transition: all 0.5s;
+  &::before,
+  &::after {
+    content: '';
     display: block;
     position: absolute;
     top: 3px;
@@ -139,16 +140,19 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .button:hover,.button:focus-visible {
+  .button:hover,
+  .button:focus-visible {
     filter: brightness(1.2);
   }
-  .password-toggle:hover, .password-toggle:focus-visible {
+  .password-toggle:hover,
+  .password-toggle:focus-visible {
     opacity: 1;
   }
   .input:focus-visible {
     outline: 2px solid $info-color;
   }
-  .reset:hover, .reset:focus-visible {
+  .reset:hover,
+  .reset:focus-visible {
     opacity: 1;
   }
 }

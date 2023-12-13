@@ -11,7 +11,8 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .span a:hover, .span a:focus-visible {
+  .span a:hover,
+  .span a:focus-visible {
     filter: brightness(1.2);
   }
 }
